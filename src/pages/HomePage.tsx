@@ -3,6 +3,7 @@ import { ArrowRight, CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, Chev
 import HeroCarousel from '../components/HeroCarousel';
 import ProductCard from '../components/ProductCard';
 import { supabase, Product } from '../lib/supabase';
+
 type Props = {
   onNavigate: (page: string, params?: Record<string, string>) => void;
 };
@@ -12,7 +13,7 @@ export default function HomePage({ onNavigate }: Props) {
   const [deals, setDeals] = useState<Product[]>([]);
   const [trending, setTrending] = useState<Product[]>([]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
-
+  const [bannerIndex, setBannerIndex] = useState(0);
   useEffect(() => {
     (async () => {
       const [bestRes, dealsRes, trendingRes] = await Promise.all([
@@ -29,6 +30,15 @@ export default function HomePage({ onNavigate }: Props) {
       setTrending(trendingRes.data || []);
     })();
   }, []);
+
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setBannerIndex((prev) => (prev + 1) % 2);
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, []);
 
   useEffect(() => {
     const carousel = carouselRef.current;
@@ -48,6 +58,35 @@ export default function HomePage({ onNavigate }: Props) {
 
     return () => window.clearInterval(interval);
   }, [trending]);
+
+
+  useEffect(() => {
+  const carousel = carouselRef.current;
+  if (!carousel || trending.length === 0) return;
+
+  const interval = setInterval(() => {
+    const cardWidth = 272; // card width + gap
+
+    const maxScroll =
+      carousel.scrollWidth - carousel.clientWidth;
+
+    if (carousel.scrollLeft + cardWidth >= maxScroll) {
+      carousel.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
+    } else {
+      carousel.scrollBy({
+        left: cardWidth,
+        behavior: "smooth",
+      });
+    }
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, [trending]);
+
+
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -88,6 +127,7 @@ export default function HomePage({ onNavigate }: Props) {
           ))}
         </div>
       </section> */}
+      
 
       {/* Today's Deals */}
       {deals.length > 0 && (
@@ -147,7 +187,7 @@ export default function HomePage({ onNavigate }: Props) {
         </section>
       )} */}
 
-      {/* Trending Carousel */}
+      {/* Trending Carousel
       {trending.length > 0 && (
         <section className="relative max-w-6xl mx-auto px-4 py-14">
           <div className="flex items-center justify-between mb-8">
@@ -189,8 +229,71 @@ export default function HomePage({ onNavigate }: Props) {
             </div>
           </div>
         </section>
-      )}
+      )} */}
+{/* Trending Carousel */}
+{trending.length > 0 && (
+  <section className="relative max-w-7xl mx-auto px-4 py-14">
+    <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center gap-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center">
+          <TrendingUp size={18} className="text-amber-600" />
+        </div>
+        <div>
+          <h2 className="text-2xl md:text-3xl font-black text-slate-900">
+            Top Trending
+          </h2>
+          <p className="text-slate-500 text-sm">
+            High-count carousel featuring trending electronics and fashion favorites
+          </p>
+        </div>
+      </div>
+    </div>
 
+    <div className="relative">
+      {/* LEFT ARROW */}
+      <button
+        onClick={() => scrollCarousel('left')}
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
+      >
+        <ChevronLeft size={22} />
+      </button>
+
+      {/* RIGHT ARROW */}
+      <button
+        onClick={() => scrollCarousel('right')}
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
+      >
+        <ChevronRight size={22} />
+      </button>
+
+      {/* CAROUSEL */}
+      <div
+        ref={carouselRef}
+        className="
+          flex
+          gap-4
+          overflow-x-auto
+          scroll-smooth
+          scrollbar-hide
+          px-10
+          pb-2
+        "
+      >
+        {trending.map((product) => (
+          <div
+            key={product.id}
+            className="min-w-[260px] max-w-[260px] shrink-0"
+          >
+            <ProductCard
+              product={product}
+              onNavigate={onNavigate}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
       {/* Best Sellers */}
       {/* {bestsellers.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 py-14">
@@ -248,7 +351,149 @@ export default function HomePage({ onNavigate }: Props) {
           </div>
         </section>
       )} */}
+{/* Second banner */}
+      {/* <section className="max-w-7xl mx-auto px-4 py-6 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="relative rounded-2xl overflow-hidden h-48">
+            <img src="https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg" alt="Beauty" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-900/80 to-transparent" />
+            <div className="absolute inset-0 flex items-center px-7">
+              <div>
+                <p className="text-fuchsia-300 text-xs font-bold uppercase tracking-widest">Glow Up</p>
+                <h3 className="text-white text-2xl font-black mb-3">Beauty & Care</h3>
+                <button onClick={() => onNavigate('category', { slug: 'beauty' })} className="bg-fuchsia-500 hover:bg-fuchsia-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">Shop Now</button>
+              </div>
+            </div>
+          </div>
+          <div className="relative rounded-2xl overflow-hidden h-48">
+            <img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg" alt="Home Kitchen" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/80 to-transparent" />
+            <div className="absolute inset-0 flex items-center px-7">
+              <div>
+                <p className="text-amber-300 text-xs font-bold uppercase tracking-widest">Home Essentials</p>
+                <h3 className="text-white text-2xl font-black mb-3">Home & Kitchen</h3>
+                <button onClick={() => onNavigate('category', { slug: 'home-kitchen' })} className="bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">Shop Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> */}
+      {/* Auto Sliding Promotional Banner */}
+<section className="max-w-7xl mx-auto px-4 py-8 pb-12">
+  <div className="relative overflow-hidden rounded-3xl h-72 shadow-xl">
 
+    {/* Slider */}
+    <div
+      className="flex h-full transition-transform duration-700 ease-in-out"
+      style={{
+        transform: `translateX(-${bannerIndex * 100}%)`,
+      }}
+    >
+      {/* Glow Up */}
+      <div className="min-w-full relative">
+        <img
+          src="https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg"
+          alt="Beauty"
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-900/90 via-fuchsia-800/70 to-transparent" />
+
+        <div className="absolute inset-0 flex items-center px-10">
+          <div>
+            <span className="bg-fuchsia-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+              GLOW UP
+            </span>
+
+            <h3 className="text-white text-4xl font-black mt-4 mb-3">
+              Beauty & Care
+            </h3>
+
+            <p className="text-fuchsia-100 mb-6 max-w-md">
+              Discover skincare, cosmetics and wellness products.
+            </p>
+
+            <button
+              onClick={() => onNavigate('category', { slug: 'beauty' })}
+              className="bg-fuchsia-500 hover:bg-fuchsia-400 text-white font-bold px-6 py-3 rounded-xl"
+            >
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Home Essentials */}
+      <div className="min-w-full relative">
+        <img
+          src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
+          alt="Home"
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/90 via-orange-800/70 to-transparent" />
+
+        <div className="absolute inset-0 flex items-center px-10">
+          <div>
+            <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+              HOME ESSENTIALS
+            </span>
+
+            <h3 className="text-white text-4xl font-black mt-4 mb-3">
+              Home & Kitchen
+            </h3>
+
+            <p className="text-amber-100 mb-6 max-w-md">
+              Upgrade your home with premium kitchen and living essentials.
+            </p>
+
+            <button
+              onClick={() => onNavigate('category', { slug: 'home-kitchen' })}
+              className="bg-amber-500 hover:bg-amber-400 text-white font-bold px-6 py-3 rounded-xl"
+            >
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Left Arrow */}
+    <button
+      onClick={() =>
+        setBannerIndex((prev) => (prev === 0 ? 1 : prev - 1))
+      }
+      className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-white"
+    >
+      <ChevronLeft size={22} />
+    </button>
+
+    {/* Right Arrow */}
+    <button
+      onClick={() =>
+        setBannerIndex((prev) => (prev + 1) % 2)
+      }
+      className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-white"
+    >
+      <ChevronRight size={22} />
+    </button>
+
+    {/* Dots */}
+    <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+      {[0, 1].map((i) => (
+        <button
+          key={i}
+          onClick={() => setBannerIndex(i)}
+          className={`h-2.5 rounded-full transition-all ${
+            bannerIndex === i
+              ? 'w-8 bg-white'
+              : 'w-2.5 bg-white/50'
+          }`}
+        />
+      ))}
+    </div>
+  </div>
+</section>
       {/* Features */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
