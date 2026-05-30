@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { CartProvider } from './context/CartContext.tsx';
 import { WishlistProvider } from './context/WishlistContext.tsx';
+import { CurrencyProvider } from './context/CurrencyContext';
 import Header from './components/Header.tsx';
 import Footer from './components/Footer.tsx';
 import AIChat from './components/AIChat';
@@ -171,11 +172,13 @@ function AppInner() {
 export default function App() {
   return (
     <AuthProvider>
-      <WishlistProvider>
-        <CartProvider>
-          <AppInner />
-        </CartProvider>
-      </WishlistProvider>
+      <CurrencyProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <AppInner />
+          </CartProvider>
+        </WishlistProvider>
+      </CurrencyProvider>
     </AuthProvider>
   );
 }

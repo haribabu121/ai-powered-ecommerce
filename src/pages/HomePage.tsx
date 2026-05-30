@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
 import ProductCard from '../components/ProductCard';
@@ -9,11 +9,13 @@ type Props = {
 };
 
 export default function HomePage({ onNavigate }: Props) {
-  const [bestsellers, setBestsellers] = useState<Product[]>([]);
+  const [_bestsellers, setBestsellers] = useState<Product[]>([]);
   const [deals, setDeals] = useState<Product[]>([]);
   const [trending, setTrending] = useState<Product[]>([]);
-  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const [trendingSlide, setTrendingSlide] = useState(0);
   const [bannerIndex, setBannerIndex] = useState(0);
+  const TOP_TRENDING_STEP = 4;
+
   useEffect(() => {
     (async () => {
       const [bestRes, dealsRes, trendingRes] = await Promise.all([
@@ -31,60 +33,24 @@ export default function HomePage({ onNavigate }: Props) {
     })();
   }, []);
 
-
   useEffect(() => {
-  const interval = setInterval(() => {
-    setBannerIndex((prev) => (prev + 1) % 2);
-  }, 4000);
+    if (trending.length === 0) return undefined;
 
-  return () => clearInterval(interval);
-}, []);
-
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel || trending.length === 0) return undefined;
-
+    const slideCount = Math.ceil(trending.length / TOP_TRENDING_STEP);
     const interval = window.setInterval(() => {
-      if (!carousel) return;
-      const itemWidth = 220 + 12;
-      const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-
-      if (carousel.scrollLeft >= maxScrollLeft - 1) {
-        carousel.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        carousel.scrollBy({ left: itemWidth, behavior: 'smooth' });
-      }
+      setTrendingSlide((prev) => (prev + 1) % slideCount);
     }, 4000);
 
     return () => window.clearInterval(interval);
   }, [trending]);
 
-
   useEffect(() => {
-  const carousel = carouselRef.current;
-  if (!carousel || trending.length === 0) return;
+    const interval = setInterval(() => {
+      setBannerIndex((prev) => (prev + 1) % 2);
+    }, 4000);
 
-  const interval = setInterval(() => {
-    const cardWidth = 272; // card width + gap
-
-    const maxScroll =
-      carousel.scrollWidth - carousel.clientWidth;
-
-    if (carousel.scrollLeft + cardWidth >= maxScroll) {
-      carousel.scrollTo({
-        left: 0,
-        behavior: "smooth",
-      });
-    } else {
-      carousel.scrollBy({
-        left: cardWidth,
-        behavior: "smooth",
-      });
-    }
-  }, 4000);
-
-  return () => clearInterval(interval);
-}, [trending]);
+    return () => clearInterval(interval);
+  }, []);
 
 
 
@@ -252,7 +218,10 @@ export default function HomePage({ onNavigate }: Props) {
     <div className="relative">
       {/* LEFT ARROW */}
       <button
-        onClick={() => scrollCarousel('left')}
+        onClick={() => setTrendingSlide((prev) => {
+          const slideCount = Math.ceil(trending.length / TOP_TRENDING_STEP);
+          return (prev - 1 + slideCount) % slideCount;
+        })}
         className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
       >
         <ChevronLeft size={22} />
@@ -260,36 +229,24 @@ export default function HomePage({ onNavigate }: Props) {
 
       {/* RIGHT ARROW */}
       <button
-        onClick={() => scrollCarousel('right')}
+        onClick={() => setTrendingSlide((prev) => {
+          const slideCount = Math.ceil(trending.length / TOP_TRENDING_STEP);
+          return (prev + 1) % slideCount;
+        })}
         className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
       >
         <ChevronRight size={22} />
       </button>
 
       {/* CAROUSEL */}
-      <div
-        ref={carouselRef}
-        className="
-          flex
-          gap-4
-          overflow-x-auto
-          scroll-smooth
-          scrollbar-hide
-          px-10
-          pb-2
-        "
-      >
-        {trending.map((product) => (
-          <div
-            key={product.id}
-            className="min-w-[260px] max-w-[260px] shrink-0"
-          >
-            <ProductCard
-              product={product}
-              onNavigate={onNavigate}
-            />
-          </div>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        {trending
+          .slice(trendingSlide * TOP_TRENDING_STEP, trendingSlide * TOP_TRENDING_STEP + TOP_TRENDING_STEP)
+          .map((product) => (
+            <div key={product.id}>
+              <ProductCard product={product} onNavigate={onNavigate} />
+            </div>
+          ))}
       </div>
     </div>
   </section>

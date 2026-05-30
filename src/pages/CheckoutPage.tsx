@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { getSessionId } from '../lib/session';
+import { useCurrency } from '../context/CurrencyContext';
 
 type Props = {
   onNavigate: (page: string, params?: Record<string, string>) => void;
@@ -33,6 +34,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
   const tax = total * 0.08;
   const discount = 0;
   const orderTotal = total + shippingCost + tax - discount;
+  const { formatPrice } = useCurrency();
 
   const handlePlaceOrder = async () => {
     setError(null);
@@ -336,7 +338,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
                           <p className="text-slate-800 font-semibold text-sm line-clamp-1">{item.product.name}</p>
                           <p className="text-slate-500 text-xs">Qty: {item.quantity}</p>
                         </div>
-                        <p className="font-bold text-slate-900 text-sm">${(item.product.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-bold text-slate-900 text-sm">{formatPrice(item.product.price * item.quantity)}</p>
                       </div>
                     ))}
                   </div>
@@ -358,7 +360,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
                       className="flex-1 bg-gradient-to-r from-orange-400 to-rose-500 hover:shadow-xl disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-orange-200 flex items-center justify-center gap-2"
                     >
                       <Lock size={16} />
-                      {placing ? 'Placing Order...' : `Place Order — $${orderTotal.toFixed(2)}`}
+                      {placing ? 'Placing Order...' : `Place Order — ${formatPrice(orderTotal)}`}
                     </button>
                   </div>
                 </div>
@@ -370,24 +372,24 @@ export default function CheckoutPage({ onNavigate }: Props) {
           <div>
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
               <h3 className="font-bold text-slate-900 mb-4">Order Summary</h3>
-              <div className="space-y-2.5 text-sm mb-4">
+                <div className="space-y-2.5 text-sm mb-4">
                 <div className="flex justify-between text-slate-600">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-slate-900">${total.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-900">{formatPrice(total)}</span>
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>Shipping</span>
                   <span className={shippingCost === 0 ? 'text-orange-600 font-semibold' : 'font-semibold text-slate-900'}>
-                    {shippingCost === 0 ? 'FREE' : `$${shippingCost.toFixed(2)}`}
+                    {shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>Tax</span>
-                  <span className="font-semibold text-slate-900">${tax.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-900">{formatPrice(tax)}</span>
                 </div>
                 <div className="border-t border-slate-100 pt-2.5 flex justify-between font-black text-slate-900 text-base">
                   <span>Total</span>
-                  <span>${orderTotal.toFixed(2)}</span>
+                  <span>{formatPrice(orderTotal)}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-slate-400 text-xs justify-center">

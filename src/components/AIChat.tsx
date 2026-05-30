@@ -135,8 +135,8 @@ export default function AIChat() {
 
   return (
     <>
-      {/* Floating button - right margin top vertical */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-3">
+      {/* Floating button - bottom right */}
+      <div className="fixed right-6 bottom-6 z-50 flex flex-col items-center gap-3">
         <button
           onClick={() => { setOpen(!open); setMinimized(false); }}
           className="group relative w-16 h-16 bg-gradient-to-br from-orange-400 via-rose-500 to-pink-500 rounded-2xl shadow-2xl hover:shadow-[0_20px_40px_rgba(251,146,60,0.4)] flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
@@ -183,7 +183,7 @@ export default function AIChat() {
       {/* Chat window */}
       {open && (
         <div
-          className={`fixed right-6 top-1/2 -translate-y-1/2 z-50 bg-white rounded-3xl shadow-2xl border-2 border-orange-100 flex flex-col transition-all duration-300 ${
+          className={`fixed right-6 bottom-24 z-50 bg-white rounded-3xl shadow-2xl border-2 border-orange-100 flex flex-col transition-all duration-300 ${
             minimized ? 'h-14 w-80' : 'w-80 sm:w-96 h-[580px]'
           }`}
         >

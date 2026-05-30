@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Tag, Truck, Shield, ChevronRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 type Props = {
   onNavigate: (page: string, params?: Record<string, string>) => void;
@@ -18,6 +19,7 @@ export default function CartPage({ onNavigate }: Props) {
   const orderTotal = total + shipping + tax - discount;
 
   const fallback = 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg';
+  const { formatPrice } = useCurrency();
 
   return (
     <div className="min-h-screen bg-slate-50 pt-24 md:pt-28">
@@ -60,8 +62,8 @@ export default function CartPage({ onNavigate }: Props) {
                   <Truck size={20} className="text-orange-500 flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-orange-800 text-sm font-medium">
-                      Add <strong>${(35 - total).toFixed(2)}</strong> more for free shipping!
-                    </p>
+                        Add <strong>{formatPrice(Math.max(0, 35 - total))}</strong> more for free shipping!
+                      </p>
                     <div className="mt-2 h-2 bg-orange-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-orange-400 to-rose-500 rounded-full transition-all duration-500"
@@ -136,10 +138,10 @@ export default function CartPage({ onNavigate }: Props) {
                       </div>
 
                       <div className="text-right">
-                        <p className="text-slate-900 font-black text-xl">${(item.product.price * item.quantity).toFixed(2)}</p>
-                        {item.quantity > 1 && (
-                          <p className="text-slate-400 text-xs">${item.product.price.toFixed(2)} each</p>
-                        )}
+                        <p className="text-slate-900 font-black text-xl">{formatPrice(item.product.price * item.quantity)}</p>
+                            {item.quantity > 1 && (
+                              <p className="text-slate-400 text-xs">{formatPrice(item.product.price)} each</p>
+                            )}
                       </div>
                     </div>
                   </div>
@@ -190,27 +192,27 @@ export default function CartPage({ onNavigate }: Props) {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between text-slate-600">
                     <span>Subtotal ({itemCount} items)</span>
-                    <span className="font-semibold text-slate-900">${total.toFixed(2)}</span>
+                    <span className="font-semibold text-slate-900">{formatPrice(total)}</span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Shipping</span>
                     <span className={shipping === 0 ? 'text-green-600 font-semibold' : 'font-semibold text-slate-900'}>
-                      {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? 'FREE' : formatPrice(shipping)}
                     </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Estimated Tax</span>
-                    <span className="font-semibold text-slate-900">${tax.toFixed(2)}</span>
+                    <span className="font-semibold text-slate-900">{formatPrice(tax)}</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-green-600 font-semibold">
                       <span>Promo Discount</span>
-                      <span>-${discount.toFixed(2)}</span>
+                      <span>-{formatPrice(discount)}</span>
                     </div>
                   )}
                   <div className="border-t border-slate-100 pt-3 flex justify-between font-black text-slate-900 text-lg">
                     <span>Total</span>
-                    <span>${orderTotal.toFixed(2)}</span>
+                    <span>{formatPrice(orderTotal)}</span>
                   </div>
                 </div>
 

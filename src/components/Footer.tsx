@@ -18,7 +18,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             <span className="text-white font-extrabold text-2xl">Mart<span className="text-orange-400">X</span></span>
           </button>
           <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
-            Your one-stop destination for quality products. We bring the best brands right to your doorstep with fast shipping and great prices.
+            signup for martx for regular updates 
           </p>
           <div className="flex items-center gap-3 mb-6">
             {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (

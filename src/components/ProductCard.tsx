@@ -4,6 +4,7 @@ import { Product } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 type Props = {
   product: Product;
@@ -14,6 +15,7 @@ export default function ProductCard({ product, onNavigate }: Props) {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { formatPrice } = useCurrency();
   const [added, setAdded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
@@ -131,9 +133,9 @@ export default function ProductCard({ product, onNavigate }: Props) {
 
         {/* Price */}
         <div className="flex items-center gap-3">
-          <span className="text-slate-900 font-extrabold text-xl">${product.price.toFixed(2)}</span>
+          <span className="text-slate-900 font-extrabold text-xl">{formatPrice(product.price)}</span>
           {product.original_price && product.original_price > product.price && (
-            <span className="text-slate-300 text-sm line-through">${product.original_price.toFixed(2)}</span>
+            <span className="text-slate-300 text-sm line-through">{formatPrice(product.original_price)}</span>
           )}
         </div>
 

@@ -3,6 +3,7 @@ import { ShoppingCart, Search, User, Menu, X, Heart, Package, LogOut, ChevronDow
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { Category } from '../lib/supabase';
 
 type HeaderProps = {
@@ -20,6 +21,8 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+  const { currency, setCurrency } = useCurrency();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -144,6 +147,30 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
               </span>
             )}
           </button>
+
+          {/* Currency selector */}
+          <div className="relative hidden sm:block">
+            <button
+              onClick={() => setCurrencyOpen(!currencyOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-sm text-slate-700"
+            >
+              <span className="text-sm">{currency === 'CAD' ? '🇨🇦' : '🇺🇸'}</span>
+              <span className="hidden md:block font-medium">{currency}</span>
+              <ChevronDown size={14} className="text-slate-400" />
+            </button>
+            {currencyOpen && (
+              <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
+                <button
+                  onClick={() => { setCurrencyOpen(false); setCurrency('USD'); }}
+                  className="w-full text-left px-4 py-2 hover:bg-slate-50"
+                >🇺🇸 United States — USD</button>
+                <button
+                  onClick={() => { setCurrencyOpen(false); setCurrency('CAD'); }}
+                  className="w-full text-left px-4 py-2 hover:bg-slate-50"
+                >🇨🇦 Canada — CAD</button>
+              </div>
+            )}
+          </div>
 
           {/* Cart */}
           <button
