@@ -35,7 +35,7 @@ INSERT INTO products
 (name, slug, description, price, original_price, discount_percent,
  category_id, brand, stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller, is_new,
- prime_eligible, tags)
+ prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -54,7 +54,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -64,33 +65,37 @@ VALUES
 1199,1199,0,'Apple',200,4.8,8921,
 'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg',
 true,true,true,
-ARRAY['iphone','apple','smartphone']),
+ARRAY['iphone','apple','smartphone'],
+'smartphones'),
 
 ('Apple MacBook Air M2','apple-macbook-air-m2',
 'M2 chip laptop with Retina display',
 1099,1199,8,'Apple',80,4.9,5621,
 'https://images.pexels.com/photos/18105/pexels-photo.jpg',
 true,true,false,
-ARRAY['laptop','apple','m2']),
+ARRAY['laptop','apple','m2'],
+'laptops'),
 
 ('Sony WH-1000XM5 Headphones','sony-wh-1000xm5',
 'Noise canceling wireless headphones',
 279.99,349.99,20,'Sony',150,4.8,3421,
 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg',
 true,true,false,
-ARRAY['headphones','wireless']),
+ARRAY['headphones','wireless'],
+'accessories'),
 
 ('Samsung 4K Smart TV 55','samsung-4k-tv-55',
 'Crystal UHD Smart TV',
 499.99,699.99,29,'Samsung',60,4.6,2341,
 'https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg',
 true,false,false,
-ARRAY['tv','4k','smart'])
+ARRAY['tv','4k','smart'],
+'appliances')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
@@ -104,7 +109,8 @@ discount_percent = EXCLUDED.discount_percent,
 stock_quantity = EXCLUDED.stock_quantity,
 rating = EXCLUDED.rating,
 review_count = EXCLUDED.review_count,
-image_url = EXCLUDED.image_url;
+image_url = EXCLUDED.image_url,
+subcategory = EXCLUDED.subcategory;
 
 -- ============================================
 -- FASHION PRODUCTS
@@ -115,7 +121,7 @@ INSERT INTO products
  discount_percent, category_id, brand,
  stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller,
- is_new, prime_eligible, tags)
+ is_new, prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -134,7 +140,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -144,26 +151,29 @@ VALUES
 189.99,259.99,27,'UrbanStyle',120,4.6,892,
 'https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg',
 true,false,false,
-ARRAY['jacket','leather']),
+ARRAY['jacket','leather'],
+'menswear'),
 
 ('Premium Denim Jeans','premium-denim-jeans',
 'Stretch denim tapered fit',
 69.99,99.99,30,'DenimCo',250,4.4,1432,
 'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg',
 false,true,false,
-ARRAY['jeans','denim']),
+ARRAY['jeans','denim'],
+'tops'),
 
 ('Running Sneakers Ultra','running-sneakers-ultra',
 'Lightweight running sneakers',
 119.99,159.99,25,'SwiftRun',200,4.8,3201,
 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg',
 true,true,false,
-ARRAY['sneakers','running'])
+ARRAY['sneakers','running'],
+'shoes')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
@@ -172,7 +182,8 @@ ON c.slug = 'fashion'
 ON CONFLICT (slug) DO UPDATE SET
 description = EXCLUDED.description,
 price = EXCLUDED.price,
-stock_quantity = EXCLUDED.stock_quantity;
+stock_quantity = EXCLUDED.stock_quantity,
+subcategory = EXCLUDED.subcategory;
 
 -- ============================================
 -- HOME & KITCHEN PRODUCTS
@@ -183,7 +194,7 @@ INSERT INTO products
  discount_percent, category_id, brand,
  stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller,
- is_new, prime_eligible, tags)
+ is_new, prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -202,7 +213,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -212,30 +224,39 @@ VALUES
 129.99,179.99,28,'BrewMaster',140,4.6,2341,
 'https://images.pexels.com/photos/324028/pexels-photo-324028.jpeg',
 true,true,false,
-ARRAY['coffee','kitchen']),
+ARRAY['coffee','kitchen'],
+'appliances'),
 
 ('Robot Vacuum Cleaner','robot-vacuum-cleaner',
 'Smart robot vacuum with auto mapping',
 299.99,399.99,25,'CleanBot',55,4.6,2103,
 'https://images.pexels.com/photos/3935362/pexels-photo-3935362.jpeg',
 true,true,true,
-ARRAY['vacuum','robot']),
+ARRAY['vacuum','robot'],
+'appliances'),
 
 ('Ceramic Cookware Set','ceramic-cookware-set',
 '10-piece ceramic cookware set',
 149.99,229.99,35,'ChefElite',75,4.8,934,
 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
 true,false,false,
-ARRAY['cookware','kitchen'])
+ARRAY['cookware','kitchen'],
+'cookware')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
-ON c.slug = 'home-kitchen';
+ON c.slug = 'home-kitchen'
+
+ON CONFLICT (slug) DO UPDATE SET
+description = EXCLUDED.description,
+price = EXCLUDED.price,
+stock_quantity = EXCLUDED.stock_quantity,
+subcategory = EXCLUDED.subcategory;
 
 -- ============================================
 -- BEAUTY & CARE PRODUCTS
@@ -246,7 +267,7 @@ INSERT INTO products
  discount_percent, category_id, brand,
  stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller,
- is_new, prime_eligible, tags)
+ is_new, prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -265,7 +286,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -275,23 +297,31 @@ VALUES
 34.99,49.99,30,'GlowLab',500,4.8,8932,
 'https://images.pexels.com/photos/3685530/pexels-photo-3685530.jpeg',
 true,true,false,
-ARRAY['serum','skincare']),
+ARRAY['serum','skincare'],
+'skincare'),
 
 ('Luxury Perfume Collection','luxury-perfume-collection',
 'Mini fragrance collection',
 89.99,129.99,31,'ScentLux',120,4.9,1234,
 'https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg',
 true,false,true,
-ARRAY['perfume','fragrance'])
+ARRAY['perfume','fragrance'],
+'makeup')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
-ON c.slug = 'beauty-care';
+ON c.slug = 'beauty-care'
+
+ON CONFLICT (slug) DO UPDATE SET
+description = EXCLUDED.description,
+price = EXCLUDED.price,
+stock_quantity = EXCLUDED.stock_quantity,
+subcategory = EXCLUDED.subcategory;
 
 -- ============================================
 -- HEALTH & WELLNESS PRODUCTS
@@ -302,7 +332,7 @@ INSERT INTO products
  discount_percent, category_id, brand,
  stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller,
- is_new, prime_eligible, tags)
+ is_new, prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -321,7 +351,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -331,23 +362,31 @@ VALUES
 199.99,279.99,29,'FitTrack',300,4.7,5678,
 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg',
 true,true,false,
-ARRAY['fitness','watch']),
+ARRAY['fitness','watch'],
+'fitness'),
 
 ('Yoga Mat Premium','yoga-mat-premium',
 'Non-slip eco yoga mat',
 49.99,69.99,29,'ZenFlow',400,4.8,4321,
 'https://images.pexels.com/photos/4056723/pexels-photo-4056723.jpeg',
 false,true,false,
-ARRAY['yoga','fitness'])
+ARRAY['yoga','fitness'],
+'fitness')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
-ON c.slug = 'health-wellness';
+ON c.slug = 'health-wellness'
+
+ON CONFLICT (slug) DO UPDATE SET
+description = EXCLUDED.description,
+price = EXCLUDED.price,
+stock_quantity = EXCLUDED.stock_quantity,
+subcategory = EXCLUDED.subcategory;
 
 -- ============================================
 -- GAMING PRODUCTS
@@ -358,7 +397,7 @@ INSERT INTO products
  discount_percent, category_id, brand,
  stock_quantity, rating, review_count,
  image_url, is_featured, is_bestseller,
- is_new, prime_eligible, tags)
+ is_new, prime_eligible, tags, subcategory)
 
 SELECT
 p.name,
@@ -377,7 +416,8 @@ p.featured,
 p.bestseller,
 p.is_new,
 true,
-p.tags
+p.tags,
+p.subcategory
 
 FROM (
 VALUES
@@ -387,27 +427,36 @@ VALUES
 89.99,129.99,31,'GameForce',200,4.8,3456,
 'https://images.pexels.com/photos/2115257/pexels-photo-2115257.jpeg',
 true,true,false,
-ARRAY['keyboard','gaming']),
+ARRAY['keyboard','gaming'],
+'accessories'),
 
 ('Gaming Mouse Pro','gaming-mouse-pro',
 'Wireless gaming mouse',
 69.99,99.99,30,'GameForce',300,4.7,5678,
 'https://images.pexels.com/photos/2115256/pexels-photo-2115256.jpeg',
 false,true,false,
-ARRAY['mouse','gaming']),
+ARRAY['mouse','gaming'],
+'accessories'),
 
 ('4K Gaming Monitor','4k-gaming-monitor',
 '144Hz IPS gaming monitor',
 399.99,549.99,27,'VisionPro',80,4.9,1234,
 'https://images.pexels.com/photos/1714205/pexels-photo-1714205.jpeg',
 true,true,true,
-ARRAY['monitor','gaming'])
+ARRAY['monitor','gaming'],
+'accessories')
 
 ) AS p(
 name, slug, description, price, original_price,
 discount_percent, brand, stock, rating, reviews,
-image_url, featured, bestseller, is_new, tags
+image_url, featured, bestseller, is_new, tags, subcategory
 )
 
 JOIN categories c
-ON c.slug = 'gaming';
+ON c.slug = 'gaming'
+
+ON CONFLICT (slug) DO UPDATE SET
+description = EXCLUDED.description,
+price = EXCLUDED.price,
+stock_quantity = EXCLUDED.stock_quantity,
+subcategory = EXCLUDED.subcategory;

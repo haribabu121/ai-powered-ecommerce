@@ -86,7 +86,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
               className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={16} />}
+                {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={22} />}
               </div>
               <span className="hidden md:block text-sm font-medium text-slate-700 max-w-[120px] truncate">
                 {user ? (profile?.full_name || 'Account') : 'Sign In'}
@@ -148,7 +148,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
             )}
           </button>
 
-          {/* Currency selector */}
+          {/* Currency selector
           <div className="relative hidden sm:block">
             <button
               onClick={() => setCurrencyOpen(!currencyOpen)}
@@ -170,7 +170,60 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
                 >🇨🇦 Canada — CAD</button>
               </div>
             )}
-          </div>
+          </div> */}
+          {/* Currency selector */}
+<div className="relative hidden sm:block">
+  <button
+    onClick={() => setCurrencyOpen(!currencyOpen)}
+    className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-sm text-slate-700"
+  >
+    <img
+      src={
+        currency === "CAD"
+          ? "https://flagcdn.com/w40/ca.png"
+          : "https://flagcdn.com/w40/us.png"
+      }
+      alt={currency}
+      className="w-5 h-5 rounded-full object-cover"
+    />
+    <span className="font-medium">{currency === "CAD" ? "CA" : "US"}</span>
+    <ChevronDown size={14} className="text-slate-400" />
+  </button>
+
+  {currencyOpen && (
+    <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
+      <button
+        onClick={() => {
+          setCurrencyOpen(false);
+          setCurrency("USD");
+        }}
+        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-slate-50"
+      >
+        <img
+          src="https://flagcdn.com/w40/us.png"
+          alt="US"
+          className="w-5 h-5 rounded-full object-cover"
+        />
+        <span>US</span>
+      </button>
+
+      <button
+        onClick={() => {
+          setCurrencyOpen(false);
+          setCurrency("CAD");
+        }}
+        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-slate-50"
+      >
+        <img
+          src="https://flagcdn.com/w40/ca.png"
+          alt="CA"
+          className="w-5 h-5 rounded-full object-cover"
+        />
+        <span>CA</span>
+      </button>
+    </div>
+  )}
+</div>
 
           {/* Cart */}
           <button

@@ -33,42 +33,46 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     fashion: [
       { slug: 'tops', name: 'Tops' },
       { slug: 'shoes', name: 'Shoes' },
-      { slug: 'accessories', name: 'Accessories' },
-      { slug: 'bags', name: 'Bags' },
+      { slug: 'menswear', name: 'Menswear' },
     ],
     'home-kitchen': [
-      { slug: 'furniture', name: 'Furniture' },
-      { slug: 'cookware', name: 'Cookware' },
-      { slug: 'decor', name: 'Decor' },
       { slug: 'appliances', name: 'Appliances' },
+      { slug: 'toilets', name: 'Toilets' },
+      { slug: 'tissues', name: 'Tissues' },
     ],
     'beauty-care': [
       { slug: 'skincare', name: 'Skincare' },
       { slug: 'makeup', name: 'Makeup' },
-      { slug: 'wellness', name: 'Wellness' },
       { slug: 'hair-care', name: 'Hair Care' },
     ],
-    'health-wellness': [
-      { slug: 'supplements', name: 'Supplements' },
-      { slug: 'fitness', name: 'Fitness' },
-      { slug: 'personal-care', name: 'Personal Care' },
-      { slug: 'nutrition', name: 'Nutrition' },
-    ],
-    gaming: [
-      { slug: 'consoles', name: 'Consoles' },
-      { slug: 'accessories', name: 'Accessories' },
-      { slug: 'games', name: 'Games' },
-      { slug: 'headsets', name: 'Headsets' },
-    ],
     grocery: [
-      { slug: 'produce', name: 'Produce' },
-      { slug: 'snacks', name: 'Snacks' },
-      { slug: 'beverages', name: 'Beverages' },
-      { slug: 'household', name: 'Household' },
+      { slug: 'jaggery', name: 'Jaggery (2)' },
+      { slug: 'cereals', name: 'Cereals (4)' },
+      { slug: 'nuts', name: 'Nuts & Dry Fruits (9)' },
+      { slug: 'flour', name: 'Flour (3)' },
+      { slug: 'dals', name: 'Dals & Beans (4)' },
+      { slug: 'rice-flour', name: 'Rice Flour (2)' },
+      { slug: 'rice', name: 'Rice (8)' },
+      { slug: 'spices', name: 'Spices (46)' },
     ],
+    // 'health-wellness': [
+    //   { slug: 'supplements', name: 'Supplements' },
+    //   { slug: 'fitness', name: 'Fitness' },
+    //   { slug: 'personal-care', name: 'Personal Care' },
+    //   { slug: 'nutrition', name: 'Nutrition' },
+    // ],
+    // gaming: [
+    //   { slug: 'consoles', name: 'Consoles' },
+    //   { slug: 'accessories', name: 'Accessories' },
+    //   { slug: 'games', name: 'Games' },
+    //   { slug: 'headsets', name: 'Headsets' },
+    // ],
   };
 
   useEffect(() => {
+    // Ensure the active category dropdown is open when navigating to a category
+    setOpenCategories((prev) => ({ ...prev, [categorySlug]: true }));
+
     setLoading(true);
     let query = supabase.from('products').select('*, categories(*)');
 
@@ -76,8 +80,8 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       query = query.eq('category_id', category.id);
     }
 
-    if ((categorySlug === 'electronics' || categorySlug === 'grocery') && subCategory !== 'all') {
-      query = query.contains('tags', [subCategory]);
+    if (subCategory !== 'all') {
+      query = query.eq('subcategory', subCategory);
     }
 
     query = query.gte('price', priceRange[0]).lte('price', priceRange[1]);
@@ -91,7 +95,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     }
 
     query.then(({ data }) => {
-      setProducts(data || []);
+      setProducts((data || []) as Product[]);
       setLoading(false);
     });
   }, [categorySlug, category, sort, priceRange, subCategory]);
@@ -102,7 +106,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     'home-kitchen': 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg',
     'beauty-care': 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg',
     'health-wellness': 'https://images.pexels.com/photos/4498158/pexels-photo-4498158.jpeg',
-    'gaming': 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg',
+    // 'gaming': 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg',
   };
 
   return (
@@ -136,10 +140,10 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
         {/* Sidebar Filter - Desktop */}
         <aside className="hidden lg:block w-60 flex-shrink-0">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
-            <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+            {/* <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
               <SlidersHorizontal size={16} />
               Filters
-            </h3>
+            </h3> */}
 
             {/* Price range */}
             {/* <div className="mb-5">

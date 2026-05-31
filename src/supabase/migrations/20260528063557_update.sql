@@ -72,28 +72,32 @@ SELECT
   p.name, p.slug, p.description, p.price, p.original_price, p.discount_percent,
   c.id, p.brand, p.stock, p.rating, p.reviews, p.image_url, p.featured, p.bestseller, p.is_new, true, p.tags
 FROM (VALUES
-  -- Jackets & Outerwear
-  ('Classic Leather Jacket', 'classic-leather-jacket', 'Genuine leather biker jacket, slim fit, multiple colors available', 189.99, 259.99, 27, 'UrbanStyle', 120, 4.6, 892, 'https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg', true, true, false, ARRAY['jacket','leather','fashion']),
-  ('Denim Trucker Jacket', 'denim-trucker-jacket', 'Classic blue denim, brass buttons, relaxed fit', 89.99, 119.99, 25, 'Levis', 200, 4.5, 1567, 'https://images.pexels.com/photos/2341290/pexels-photo-2341290.jpeg', false, true, false, ARRAY['jacket','denim','casual']),
+  -- Women's Tops
+  ('Floral Summer Dress', 'floral-summer-dress', 'Light chiffon fabric, floral print, perfect for summer days', 49.99, 79.99, 37, 'Bloom', 180, 4.7, 2103, 'https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg', true, true, true, ARRAY['women-dress','summer','floral']),
+  ('Slim Fit Dress Shirt', 'slim-fit-dress-shirt', '100% cotton, wrinkle-resistant, available in 12 colors', 45.99, 65.99, 30, 'FormalEdge', 350, 4.5, 1876, 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg', false, true, false, ARRAY['women-shirt','formal','slim-fit']),
+  ('Casual Linen Shirt', 'casual-linen-shirt', 'Breathable linen blend, relaxed fit, summer essential', 54.99, 74.99, 27, 'BeachBum', 280, 4.4, 987, 'https://images.pexels.com/photos/2831430/pexels-photo-2831430.jpeg', false, false, true, ARRAY['women-shirt','linen','casual']),
+  ('Casual Blouse Pink', 'casual-blouse-pink', 'Soft pink blouse, perfect for casual or office wear', 39.99, 59.99, 33, 'StyleWear', 200, 4.6, 1456, 'https://images.pexels.com/photos/2703202/pexels-photo-2703202.jpeg', false, true, false, ARRAY['women-blouse','pink','casual']),
+  ('Formal Vest Dress', 'formal-vest-dress', 'Elegant vest dress, perfect for professional settings', 79.99, 119.99, 33, 'EliteFashion', 120, 4.8, 892, 'https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg', false, true, false, ARRAY['women-dress','formal','business']),
   
-  -- Tops & Shirts
-  ('Floral Summer Dress', 'floral-summer-dress', 'Light chiffon fabric, floral print, perfect for summer days', 49.99, 79.99, 37, 'Bloom', 180, 4.7, 2103, 'https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg', true, true, true, ARRAY['dress','summer','floral']),
-  ('Slim Fit Dress Shirt', 'slim-fit-dress-shirt', '100% cotton, wrinkle-resistant, available in 12 colors', 45.99, 65.99, 30, 'FormalEdge', 350, 4.5, 1876, 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg', false, true, false, ARRAY['shirt','formal','slim-fit']),
-  ('Casual Linen Shirt', 'casual-linen-shirt', 'Breathable linen blend, relaxed fit, summer essential', 54.99, 74.99, 27, 'BeachBum', 280, 4.4, 987, 'https://images.pexels.com/photos/2831430/pexels-photo-2831430.jpeg', false, false, true, ARRAY['shirt','linen','casual']),
+  -- Women's Shoes
+  ('Running Sneakers Ultra', 'running-sneakers-ultra', 'Lightweight mesh upper, responsive cushioning, breathable design', 119.99, 159.99, 25, 'SwiftRun', 200, 4.8, 3201, 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg', true, true, false, ARRAY['women-sneaker','running','sport']),
+  ('Classic White Sneakers', 'classic-white-sneakers', 'Minimalist design, leather upper, versatile styling', 79.99, 109.99, 27, 'CleanStep', 220, 4.7, 2456, 'https://images.pexels.com/photos/2385477/pexels-photo-2385477.jpeg', false, true, true, ARRAY['women-sneaker','white','casual']),
+  ('Leather Ankle Boots', 'leather-ankle-boots', 'Genuine leather, cushioned insole, durable rubber sole', 149.99, 199.99, 25, 'BootCraft', 80, 4.8, 567, 'https://images.pexels.com/photos/2632779/pexels-photo-2632779.jpeg', false, false, false, ARRAY['women-boot','leather','ankle']),
+  ('Heeled Pumps Black', 'heeled-pumps-black', 'Classic black heels, comfortable for all-day wear', 89.99, 129.99, 31, 'ElegantShoe', 150, 4.7, 1234, 'https://images.pexels.com/photos/3622622/pexels-photo-3622622.jpeg', false, true, false, ARRAY['women-shoe','heels','black']),
+  ('Casual Loafers Beige', 'casual-loafers-beige', 'Comfortable beige loafers for casual outings', 69.99, 99.99, 30, 'ComfortWalk', 180, 4.5, 987, 'https://images.pexels.com/photos/1926771/pexels-photo-1926771.jpeg', false, false, true, ARRAY['women-shoe','loafer','beige']),
   
-  -- Pants & Jeans
-  ('Premium Denim Jeans', 'premium-denim-jeans', 'Stretch denim, tapered fit, sustainable cotton blend', 69.99, 99.99, 30, 'DenimCo', 250, 4.4, 1432, 'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg', false, true, false, ARRAY['jeans','denim','casual']),
-  ('Chino Pants Classic', 'chino-pants-classic', 'Cotton twill, straight fit, available in khaki navy and olive', 49.99, 69.99, 29, 'ClassicFit', 300, 4.6, 1234, 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg', false, false, false, ARRAY['pants','chino','classic']),
+  -- Women's Bags
+  ('Designer Handbag', 'designer-handbag', 'Genuine leather, gold hardware, spacious interior', 229.99, 299.99, 23, 'LuxeCarry', 60, 4.9, 567, 'https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg', true, false, true, ARRAY['women-handbag','leather','luxury']),
+  ('Crossbody Bag', 'crossbody-bag', 'Compact design, adjustable strap, multiple pockets', 59.99, 89.99, 33, 'UrbanCarry', 150, 4.5, 1789, 'https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg', false, true, false, ARRAY['women-crossbody','compact','canvas']),
+  ('Leather Tote Bag', 'leather-tote-bag', 'Spacious leather tote, perfect for work or shopping', 129.99, 179.99, 28, 'CarryStyle', 100, 4.8, 1234, 'https://images.pexels.com/photos/1440404/pexels-photo-1440404.jpeg', false, true, false, ARRAY['women-bag','tote','leather']),
+  ('Canvas Backpack', 'canvas-backpack', 'Durable canvas backpack, comfortable straps', 59.99, 89.99, 33, 'BackpackPro', 200, 4.6, 1567, 'https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg', false, false, true, ARRAY['women-bag','backpack','canvas']),
   
-  -- Footwear
-  ('Running Sneakers Ultra', 'running-sneakers-ultra', 'Lightweight mesh upper, responsive cushioning, breathable design', 119.99, 159.99, 25, 'SwiftRun', 200, 4.8, 3201, 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg', true, true, false, ARRAY['sneakers','running','sport']),
-  ('Classic White Sneakers', 'classic-white-sneakers', 'Minimalist design, leather upper, versatile styling', 79.99, 109.99, 27, 'CleanStep', 220, 4.7, 2456, 'https://images.pexels.com/photos/2385477/pexels-photo-2385477.jpeg', false, true, true, ARRAY['sneakers','white','casual']),
-  ('Leather Ankle Boots', 'leather-ankle-boots', 'Genuine leather, cushioned insole, durable rubber sole', 149.99, 199.99, 25, 'BootCraft', 80, 4.8, 567, 'https://images.pexels.com/photos/2632779/pexels-photo-2632779.jpeg', false, false, false, ARRAY['boots','leather','ankle']),
-  
-  -- Accessories
-  ('Designer Handbag', 'designer-handbag', 'Genuine leather, gold hardware, spacious interior', 229.99, 299.99, 23, 'LuxeCarry', 60, 4.9, 567, 'https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg', true, false, true, ARRAY['handbag','leather','luxury']),
-  ('Crossbody Bag', 'crossbody-bag', 'Compact design, adjustable strap, multiple pockets', 59.99, 89.99, 33, 'UrbanCarry', 150, 4.5, 1789, 'https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg', false, true, false, ARRAY['bag','crossbody','compact']),
-  ('Aviator Sunglasses', 'aviator-sunglasses', 'Classic aviator style, UV400 protection, metal frame', 89.99, 129.99, 31, 'SunStyle', 180, 4.6, 2134, 'https://images.pexels.com/photos/70182/sunglasses-man-person-male-70182.jpeg', false, true, false, ARRAY['sunglasses','aviator','accessory'])
+  -- Men's Clothing
+  ('Formal Dress Shirt Navy', 'formal-dress-shirt-navy', 'Premium cotton, navy blue, wrinkle-free, perfect for office', 79.99, 119.99, 33, 'MensStyle', 180, 4.7, 2341, 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg', true, true, false, ARRAY['men-shirt','formal','navy']),
+  ('Casual Oxford Shirt', 'casual-oxford-shirt', 'Comfortable oxford cloth, multiple colors, relaxed fit', 59.99, 89.99, 33, 'UrbanMen', 200, 4.6, 1876, 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg', false, true, false, ARRAY['men-shirt','casual','oxford']),
+  ('Cotton Polo Shirt', 'cotton-polo-shirt', 'Classic polo, 100% cotton, breathable, various colors', 44.99, 69.99, 36, 'ClassicPolo', 250, 4.5, 1234, 'https://images.pexels.com/photos/1884581/pexels-photo-1884581.jpeg', false, true, true, ARRAY['men-shirt','polo','casual']),
+  ('Slim Fit Blazer', 'slim-fit-blazer', 'Professional blazer, single-breasted, tailored fit', 189.99, 269.99, 30, 'ElegantMen', 120, 4.8, 892, 'https://images.pexels.com/photos/3622620/pexels-photo-3622620.jpeg', true, false, false, ARRAY['men-formal','blazer','dress']),
+  ('Casual Henley Shirt', 'casual-henley-shirt', 'Layered henley, comfortable fit, long sleeves', 34.99, 54.99, 36, 'CasualMen', 300, 4.4, 765, 'https://images.pexels.com/photos/3621265/pexels-photo-3621265.jpeg', false, false, false, ARRAY['men-shirt','henley','casual'])
 ) AS p(name, slug, description, price, original_price, discount_percent, brand, stock, rating, reviews, image_url, featured, bestseller, is_new, tags)
 JOIN categories c ON c.slug = 'fashion'
 ON CONFLICT (slug) DO UPDATE SET
@@ -136,7 +140,18 @@ FROM (VALUES
   -- Home Decor
   ('Scented Candle Set', 'scented-candle-set', 'Set of 6 premium soy wax candles, 40+ hour burn time each', 39.99, 59.99, 33, 'AromaHome', 300, 4.9, 4521, 'https://images.pexels.com/photos/1662298/pexels-photo-1662298.jpeg', false, true, false, ARRAY['candles','home decor','scented']),
   ('Indoor Plant Set', 'indoor-plant-set', '3 low-maintenance plants in decorative ceramic pots', 59.99, 89.99, 33, 'GreenLife', 150, 4.6, 1789, 'https://images.pexels.com/photos/1086182/pexels-photo-1086182.jpeg', false, false, true, ARRAY['plants','home decor','indoor']),
-  ('Throw Blanket Soft', 'throw-blanket-soft', 'Ultra-soft microfiber, machine washable, multiple colors', 34.99, 49.99, 30, 'CozyHome', 280, 4.7, 2134, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', false, true, false, ARRAY['blanket','home','cozy'])
+  ('Throw Blanket Soft', 'throw-blanket-soft', 'Ultra-soft microfiber, machine washable, multiple colors', 34.99, 49.99, 30, 'CozyHome', 280, 4.7, 2134, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg', false, true, false, ARRAY['blanket','home','cozy']),
+  
+  -- Toilets & Bathroom Fixtures
+  ('Toilet Seat Comfort', 'toilet-seat-comfort', 'Padded toilet seat, soft close, easy installation', 34.99, 54.99, 36, 'BathroomPro', 200, 4.6, 1234, 'https://images.pexels.com/photos/6903435/pexels-photo-6903435.jpeg', false, true, false, ARRAY['toilet','bathroom','seat']),
+  ('Bidet Attachment', 'bidet-attachment', 'Self-cleaning nozzles, adjustable water pressure, easy install', 89.99, 129.99, 31, 'FreshBath', 120, 4.8, 892, 'https://images.pexels.com/photos/6903436/pexels-photo-6903436.jpeg', true, true, false, ARRAY['toilet','bathroom','fixture']),
+  ('Toilet Brush Holder', 'toilet-brush-holder', 'Stainless steel with brush, corner design, compact', 24.99, 39.99, 37, 'BathStyle', 300, 4.5, 567, 'https://images.pexels.com/photos/6903437/pexels-photo-6903437.jpeg', false, false, true, ARRAY['toilet','bathroom','accessory']),
+  
+  -- Tissues & Paper Products
+  ('Tissue Paper Rolls 30pk', 'tissue-paper-rolls-30pk', 'Ultra soft, 2-ply tissue rolls, hypoallergenic', 24.99, 39.99, 37, 'PaperCare', 400, 4.7, 2341, 'https://images.pexels.com/photos/3944388/pexels-photo-3944388.jpeg', true, true, false, ARRAY['tissue','paper','roll']),
+  ('Facial Tissue Box 48pc', 'facial-tissue-box-48pc', 'Aloe vera enriched, 48 boxes, gentle on skin', 19.99, 29.99, 33, 'SoftTouch', 500, 4.6, 1876, 'https://images.pexels.com/photos/3944389/pexels-photo-3944389.jpeg', false, true, true, ARRAY['tissue','paper','box']),
+  ('Napkins Paper 200ct', 'napkins-paper-200ct', 'Strong absorbent napkins, eco-friendly, 200 count', 14.99, 22.99, 35, 'GreenNapkin', 450, 4.5, 1234, 'https://images.pexels.com/photos/3944390/pexels-photo-3944390.jpeg', false, false, false, ARRAY['napkin','paper','wipes']),
+  ('Wet Wipes 80pc', 'wet-wipes-80pc', 'Alcohol-free, gentle on skin, 80 wipes per pack', 9.99, 14.99, 33, 'CleanWipe', 350, 4.7, 987, 'https://images.pexels.com/photos/3944391/pexels-photo-3944391.jpeg', false, true, false, ARRAY['wipes','tissue','bathroom'])
 ) AS p(name, slug, description, price, original_price, discount_percent, brand, stock, rating, reviews, image_url, featured, bestseller, is_new, tags)
 JOIN categories c ON c.slug = 'home-kitchen'
 ON CONFLICT (slug) DO UPDATE SET
@@ -181,7 +196,14 @@ FROM (VALUES
   
   -- Hair Care
   ('Hair Care Pro Set', 'hair-care-pro-set', 'Shampoo + Conditioner + Hair mask trio for damaged hair', 44.99, 64.99, 31, 'HairRevive', 250, 4.7, 3456, 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg', false, true, false, ARRAY['hair care','shampoo','conditioner']),
-  ('Hair Styling Cream', 'hair-styling-cream', 'Strong hold, matte finish, argan oil infused, no residue', 18.99, 26.99, 30, 'StylePro', 400, 4.5, 1987, 'https://images.pexels.com/photos/4931535/pexels-photo-4931535.jpeg', false, false, false, ARRAY['hair','styling','cream'])
+  ('Hair Styling Cream', 'hair-styling-cream', 'Strong hold, matte finish, argan oil infused, no residue', 18.99, 26.99, 30, 'StylePro', 400, 4.5, 1987, 'https://images.pexels.com/photos/4931535/pexels-photo-4931535.jpeg', false, false, false, ARRAY['hair','styling','cream']),
+  
+  -- Wellness Products
+  ('Wellness Tea Set', 'wellness-tea-set', 'Organic herbal tea collection, 6 flavors for daily wellness', 29.99, 44.99, 33, 'WellnessLeaf', 300, 4.7, 2341, 'https://images.pexels.com/photos/3656993/pexels-photo-3656993.jpeg', true, true, false, ARRAY['wellness','tea','organic']),
+  ('Bath Bombs Organic', 'bath-bombs-organic', 'Set of 12 essential oil bath bombs, relaxing aromatherapy', 39.99, 59.99, 33, 'SpaRelax', 250, 4.8, 3456, 'https://images.pexels.com/photos/3326226/pexels-photo-3326226.jpeg', true, true, true, ARRAY['wellness','bath','relax']),
+  ('Yoga Meditation Set', 'yoga-meditation-set', 'Meditation cushion + yoga mat + wellness guide', 79.99, 119.99, 33, 'MindfulLiving', 150, 4.7, 1876, 'https://images.pexels.com/photos/4056726/pexels-photo-4056726.jpeg', false, true, false, ARRAY['wellness','meditation','yoga']),
+  ('Sleep Enhancement Pillow', 'sleep-enhancement-pillow', 'Memory foam pillow, cooling gel, orthopedic support', 89.99, 129.99, 31, 'DreamComfort', 120, 4.9, 2134, 'https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg', false, true, false, ARRAY['wellness','sleep','pillow']),
+  ('Wellness Supplement Pack', 'wellness-supplement-pack', 'Multivitamin + Omega-3 + Probiotic combo pack, 30 servings', 49.99, 74.99, 33, 'HealthBoost', 200, 4.6, 1456, 'https://images.pexels.com/photos/3944388/pexels-photo-3944388.jpeg', true, false, false, ARRAY['wellness','supplement','vitamin'])
 ) AS p(name, slug, description, price, original_price, discount_percent, brand, stock, rating, reviews, image_url, featured, bestseller, is_new, tags)
 JOIN categories c ON c.slug = 'beauty-care'
 ON CONFLICT (slug) DO UPDATE SET

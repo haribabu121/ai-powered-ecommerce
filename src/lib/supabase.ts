@@ -33,6 +33,7 @@ export type Product = {
   image_url: string;
   images: string[] | null;
   tags: string[];
+  subcategory: string | null;
   features: Record<string, string> | null;
   specifications: Record<string, string> | null;
   is_featured: boolean;
