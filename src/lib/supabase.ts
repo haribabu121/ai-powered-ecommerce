@@ -16,6 +16,28 @@ export type Category = {
   created_at: string;
 };
 
+const GROCERY_SLUG = 'grocery';
+
+/** Keep only the canonical grocery category (slug `grocery`) when duplicates exist in DB. */
+export function filterCategoriesForNav(categories: Category[]): Category[] {
+  const hasCanonicalGrocery = categories.some((c) => c.slug === GROCERY_SLUG);
+  if (!hasCanonicalGrocery) return categories;
+
+  return categories.filter((c) => {
+    const isGrocery =
+      c.slug === GROCERY_SLUG ||
+      c.slug === 'groceries' ||
+      c.name.toLowerCase() === 'groceries' ||
+      c.name.toLowerCase() === 'grocery';
+    if (!isGrocery) return true;
+    return c.slug === GROCERY_SLUG;
+  });
+}
+
+export function normalizeCategorySlug(slug: string): string {
+  return slug === 'groceries' ? GROCERY_SLUG : slug;
+}
+
 export type Product = {
   id: string;
   name: string;

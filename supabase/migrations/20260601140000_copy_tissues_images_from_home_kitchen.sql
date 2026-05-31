@@ -1,0 +1,1 @@
+-- Superseded by 20260601150000_add_tissues_subcategory_products.sql (proper tissue images)

@@ -4,6 +4,14 @@ type FooterProps = {
   onNavigate: (page: string, params?: Record<string, string>) => void;
 };
 
+const SHOP_CATEGORIES = [
+  { label: 'Electronics', slug: 'electronics' },
+  { label: 'Grocery', slug: 'grocery' },
+  { label: 'Fashion', slug: 'fashion' },
+  { label: 'Home & Kitchen', slug: 'home-kitchen' },
+  { label: 'Beauty & Care', slug: 'beauty-care' },
+] as const;
+
 export default function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-300">
@@ -47,13 +55,13 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div>
           <h3 className="text-white font-bold mb-5 text-sm uppercase tracking-wider">Shop</h3>
           <ul className="space-y-3 text-sm">
-            {['Electronics', 'Grocery', 'Fashion', 'Home & Kitchen', 'Beauty'].map((item) => (
-              <li key={item}>
+            {SHOP_CATEGORIES.map(({ label, slug }) => (
+              <li key={slug}>
                 <button
-                  onClick={() => onNavigate('category', { slug: item.toLowerCase().replace(/[^a-z]+/g, '-').replace(/-+$/, '') })}
+                  onClick={() => onNavigate('category', { slug })}
                   className="text-slate-400 hover:text-orange-400 hover:translate-x-1 transition-all"
                 >
-                  {item}
+                  {label}
                 </button>
               </li>
             ))}

@@ -19,7 +19,7 @@ const CATEGORY_CAROUSELS: Record<string, CarouselSlide[]> = {
     },
     {
       id: '2',
-      image: 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg',
+      image: 'https://images.pexels.com/photos/694424/pexels-photo-694424.jpeg',
     },
     {
       id: '3',
@@ -37,7 +37,7 @@ const CATEGORY_CAROUSELS: Record<string, CarouselSlide[]> = {
     },
     {
       id: '3',
-      image: 'https://images.pexels.com/photos/2769272/pexels-photo-2769272.jpeg',
+      image: 'https://images.pexels.com/photos/19820657/pexels-photo-19820657.jpeg',
     },
   ],
   'home-kitchen': [
@@ -75,11 +75,11 @@ const CATEGORY_CAROUSELS: Record<string, CarouselSlide[]> = {
     },
     {
       id: '2',
-      image: 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg',
+      image: 'https://images.pexels.com/photos/7334141/pexels-photo-7334141.jpeg',
     },
     {
       id: '3',
-      image: 'https://images.pexels.com/photos/821365/pexels-photo-821365.jpeg',
+      image: 'https://images.pexels.com/photos/33440709/pexels-photo-33440709.jpeg',
     },
   ],
 };

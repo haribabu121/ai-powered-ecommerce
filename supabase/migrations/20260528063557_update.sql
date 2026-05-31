@@ -22,8 +22,8 @@ VALUES
 ('Health & Wellness', 'health-wellness', 'Fitness and wellness products',
 'https://images.pexels.com/photos/4498158/pexels-photo-4498158.jpeg', 'Heart', 5),
 
-('Gaming', 'gaming', 'Consoles, games and accessories',
-'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg', 'Gamepad2', 6)
+-- ('Gaming', 'gaming', 'Consoles, games and accessories',
+-- 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg', 'Gamepad2', 6)
 
 ON CONFLICT (slug) DO NOTHING;
 

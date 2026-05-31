@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
+import FAQ from '../components/FAQ';
 import ProductCard from '../components/ProductCard';
 import { supabase, Product } from '../lib/supabase';
 
@@ -308,7 +309,9 @@ export default function HomePage({ onNavigate }: Props) {
           </div>
         </section>
       )} */}
-{/* Second banner */}
+      <FAQ />
+
+      {/* Promotional banner — Glow Up / Home & Kitchen */}
       {/* <section className="max-w-7xl mx-auto px-4 py-6 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="relative rounded-2xl overflow-hidden h-48">
@@ -335,7 +338,6 @@ export default function HomePage({ onNavigate }: Props) {
           </div>
         </div>
       </section> */}
-      {/* Auto Sliding Promotional Banner */}
 <section className="max-w-7xl mx-auto px-4 py-8 pb-12">
   <div className="relative overflow-hidden rounded-3xl h-72 shadow-xl">
 
@@ -416,41 +418,6 @@ export default function HomePage({ onNavigate }: Props) {
         </div>
       </div>
     </div>
-
-
-    {/* Home Essentials */}
-      <div className="min-w-full relative">
-        <img
-          src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
-          alt="Home"
-          className="w-full h-full object-cover"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/90 via-orange-800/70 to-transparent" />
-
-        <div className="absolute inset-0 flex items-center px-10">
-          <div>
-            <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-              HOME ESSENTIALS
-            </span>
-
-            <h3 className="text-white text-4xl font-black mt-4 mb-3">
-              Home & Kitchen
-            </h3>
-
-            <p className="text-amber-100 mb-6 max-w-md">
-              Upgrade your home with premium kitchen and living essentials.
-            </p>
-
-            <button
-              onClick={() => onNavigate('category', { slug: 'home-kitchen' })}
-              className="bg-amber-500 hover:bg-amber-400 text-white font-bold px-6 py-3 rounded-xl"
-            >
-              Shop Now
-            </button>
-          </div>
-        </div>
-      </div>
 
     {/* Left Arrow */}
     <button

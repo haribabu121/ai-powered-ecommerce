@@ -148,10 +148,10 @@ FROM (VALUES
   ('Toilet Brush Holder', 'toilet-brush-holder', 'Stainless steel with brush, corner design, compact', 24.99, 39.99, 37, 'BathStyle', 300, 4.5, 567, 'https://images.pexels.com/photos/6903437/pexels-photo-6903437.jpeg', false, false, true, ARRAY['toilet','bathroom','accessory']),
   
   -- Tissues & Paper Products
-  ('Tissue Paper Rolls 30pk', 'tissue-paper-rolls-30pk', 'Ultra soft, 2-ply tissue rolls, hypoallergenic', 24.99, 39.99, 37, 'PaperCare', 400, 4.7, 2341, 'https://images.pexels.com/photos/3944388/pexels-photo-3944388.jpeg', true, true, false, ARRAY['tissue','paper','roll']),
-  ('Facial Tissue Box 48pc', 'facial-tissue-box-48pc', 'Aloe vera enriched, 48 boxes, gentle on skin', 19.99, 29.99, 33, 'SoftTouch', 500, 4.6, 1876, 'https://images.pexels.com/photos/3944389/pexels-photo-3944389.jpeg', false, true, true, ARRAY['tissue','paper','box']),
-  ('Napkins Paper 200ct', 'napkins-paper-200ct', 'Strong absorbent napkins, eco-friendly, 200 count', 14.99, 22.99, 35, 'GreenNapkin', 450, 4.5, 1234, 'https://images.pexels.com/photos/3944390/pexels-photo-3944390.jpeg', false, false, false, ARRAY['napkin','paper','wipes']),
-  ('Wet Wipes 80pc', 'wet-wipes-80pc', 'Alcohol-free, gentle on skin, 80 wipes per pack', 9.99, 14.99, 33, 'CleanWipe', 350, 4.7, 987, 'https://images.pexels.com/photos/3944391/pexels-photo-3944391.jpeg', false, true, false, ARRAY['wipes','tissue','bathroom'])
+  ('Tissue Paper Rolls 30pk', 'tissue-paper-rolls-30pk', 'Ultra soft, 2-ply tissue rolls, hypoallergenic', 24.99, 39.99, 37, 'PaperCare', 400, 4.7, 2341, 'https://images.pexels.com/photos/6620096/pexels-photo-6620096.jpeg', true, true, false, ARRAY['tissue','paper','roll']),
+  ('Facial Tissue Box 48pc', 'facial-tissue-box-48pc', 'Aloe vera enriched, 48 boxes, gentle on skin', 19.99, 29.99, 33, 'SoftTouch', 500, 4.6, 1876, 'https://images.pexels.com/photos/4046316/pexels-photo-4046316.jpeg', false, true, true, ARRAY['tissue','paper','box']),
+  ('Napkins Paper 200ct', 'napkins-paper-200ct', 'Strong absorbent napkins, eco-friendly, 200 count', 14.99, 22.99, 35, 'GreenNapkin', 450, 4.5, 1234, 'https://images.pexels.com/photos/3267540/pexels-photo-3267540.jpeg', false, false, false, ARRAY['napkin','paper','wipes']),
+  ('Wet Wipes 80pc', 'wet-wipes-80pc', 'Alcohol-free, gentle on skin, 80 wipes per pack', 9.99, 14.99, 33, 'CleanWipe', 350, 4.7, 987, 'https://images.pexels.com/photos/6627544/pexels-photo-6627544.jpeg', false, true, false, ARRAY['wipes','tissue','bathroom'])
 ) AS p(name, slug, description, price, original_price, discount_percent, brand, stock, rating, reviews, image_url, featured, bestseller, is_new, tags)
 JOIN categories c ON c.slug = 'home-kitchen'
 ON CONFLICT (slug) DO UPDATE SET

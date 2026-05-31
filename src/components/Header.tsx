@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Search, User, Menu, X, Heart, Package, LogOut, ChevronDown } from 'lucide-react';
+import { Home, ShoppingCart, Search, User, Menu, X, Heart, Package, LogOut, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -56,7 +56,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
           className="flex items-center gap-2 flex-shrink-0 mr-6"
         >
           <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-rose-500 rounded-xl flex items-center justify-center shadow-md">
-            <ShoppingCart size={20} className="text-white" />
+            <Home size={20} className="text-white" />
           </div>
           <span className="text-slate-800 font-extrabold text-xl hidden sm:block">
             Mart<span className="text-orange-500">X</span>

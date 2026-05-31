@@ -16,7 +16,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage.tsx';
 import OrdersPage from './pages/OrdersPage.tsx';
 import WishlistPage from './pages/WishlistPage';
-import { supabase, Category } from './lib/supabase';
+import { supabase, Category, filterCategoriesForNav, normalizeCategorySlug } from './lib/supabase';
 
 type Page =
   | { name: 'home' }
@@ -43,14 +43,14 @@ function AppInner() {
       .from('categories')
       .select('*')
       .order('sort_order', { ascending: true })
-      .then(({ data }) => setCategories(data || []));
+      .then(({ data }) => setCategories(filterCategoriesForNav(data || [])));
   }, []);
 
   const onNavigate = (pageName: string, params?: Record<string, string>) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     switch (pageName) {
       case 'home': setPage({ name: 'home' }); break;
-      case 'category': setPage({ name: 'category', slug: params?.slug || '' }); break;
+      case 'category': setPage({ name: 'category', slug: normalizeCategorySlug(params?.slug || '') }); break;
       case 'product': setPage({ name: 'product', slug: params?.slug || '' }); break;
       case 'cart': setPage({ name: 'cart' }); break;
       case 'checkout': setPage({ name: 'checkout' }); break;
