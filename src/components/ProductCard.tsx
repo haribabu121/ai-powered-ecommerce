@@ -10,9 +10,11 @@ import ProductAvailableQuantity from './ProductAvailableQuantity';
 type Props = {
   product: Product;
   onNavigate: (page: string, params?: Record<string, string>) => void;
+  disableAddToCart?: boolean;
+  navigateToCategory?: boolean;
 };
 
-export default function ProductCard({ product, onNavigate }: Props) {
+export default function ProductCard({ product, onNavigate, disableAddToCart = false, navigateToCategory = false }: Props) {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -30,11 +32,29 @@ export default function ProductCard({ product, onNavigate }: Props) {
   };
 
   const fallbackImage = `https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg`;
+  const categorySlug = product.categories?.slug;
+
+  const handleCardClick = () => {
+    if (navigateToCategory && categorySlug) {
+      onNavigate('category', { slug: categorySlug });
+      return;
+    }
+    onNavigate('product', { slug: product.slug });
+  };
+
+  const handleViewClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (navigateToCategory && categorySlug) {
+      onNavigate('category', { slug: categorySlug });
+      return;
+    }
+    onNavigate('product', { slug: product.slug });
+  };
 
   return (
     <div
       className="group bg-white rounded-3xl border border-slate-100 hover:border-orange-200 shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden hover:-translate-y-2 flex flex-col"
-      onClick={() => onNavigate('product', { slug: product.slug })}
+      onClick={handleCardClick}
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
@@ -85,7 +105,7 @@ export default function ProductCard({ product, onNavigate }: Props) {
             <Heart size={18} fill={wishlisted ? 'currentColor' : 'none'} />
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); onNavigate('product', { slug: product.slug }); }}
+            onClick={handleViewClick}
             className="w-10 h-10 rounded-full bg-white text-slate-500 hover:bg-orange-50 hover:text-orange-500 shadow-lg flex items-center justify-center transition-colors"
             aria-label="View product details"
           >
@@ -94,19 +114,21 @@ export default function ProductCard({ product, onNavigate }: Props) {
         </div>
 
         {/* Quick add overlay */}
-        <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-          <button
-            onClick={handleAddToCart}
-            className={`w-full py-3 rounded-2xl text-sm font-bold shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-              added
-                ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white'
-                : 'bg-gradient-to-r from-orange-400 to-rose-500 text-white hover:shadow-xl'
-            }`}
-          >
-            <ShoppingCart size={16} />
-            {added ? 'Added!' : 'Add to Cart'}
-          </button>
-        </div>
+        {!disableAddToCart && (
+          <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+            <button
+              onClick={handleAddToCart}
+              className={`w-full py-3 rounded-2xl text-sm font-bold shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                added
+                  ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white'
+                  : 'bg-gradient-to-r from-orange-400 to-rose-500 text-white hover:shadow-xl'
+              }`}
+            >
+              <ShoppingCart size={16} />
+              {added ? 'Added!' : 'Add to Cart'}
+            </button>
+          </div>
+        )}
         <ProductAvailableQuantity product={product} />
       </div>
 

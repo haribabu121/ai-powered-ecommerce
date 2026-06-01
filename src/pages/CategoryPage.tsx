@@ -3,7 +3,12 @@ import { ChevronDown, ChevronUp, Home } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import CategoryCarousel from '../components/CategoryCarousel';
 import { supabase, Category, Product } from '../lib/supabase.ts';
-import { getSubcategoriesForCategory } from '../lib/categorySubcategories';
+import {
+  getSubcategoriesForCategory,
+  getGrocerySubcategoryGroups,
+  getGrocerySubcategoriesForGroup,
+  type SubcategoryItem,
+} from '../lib/categorySubcategories';
 
 type Props = {
   categorySlug: string;
@@ -16,21 +21,33 @@ type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'newest';
 export default function CategoryPage({ categorySlug, categories, onNavigate }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const sort: SortOption = 'featured';
+  const sort = 'featured' as SortOption;
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
   const gridView = true;
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({ electronics: true });
   const [subCategory, setSubCategory] = useState('all');
+  const [groceryGroup, setGroceryGroup] = useState('jaggery');
   const category = categories.find((c) => c.slug === categorySlug);
 
-  const activeSubcategories = category
-    ? getSubcategoriesForCategory(categorySlug, category.name)
-    : [];
+  const groceryGroups = categorySlug === 'grocery' ? getGrocerySubcategoryGroups() : [];
+  const activeSubcategories = categorySlug === 'grocery'
+    ? getGrocerySubcategoriesForGroup(groceryGroup)
+    : category
+      ? getSubcategoriesForCategory(categorySlug, category.name)
+      : [];
 
   useEffect(() => {
+    if (categorySlug === 'grocery') {
+      const firstGroup = groceryGroups[0]?.slug || 'jaggery';
+      setGroceryGroup(firstGroup);
+      setSubCategory('all');
+      setOpenCategories(Object.fromEntries(groceryGroups.map((group) => [group.slug, true])));
+      return;
+    }
+
     setSubCategory('all');
     setOpenCategories({ [categorySlug]: true });
-  }, [categorySlug]);
+  }, [categorySlug, groceryGroups]);
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +57,9 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       query = query.eq('category_id', category.id);
     }
 
-    if (subCategory !== 'all') {
+    if (categorySlug === 'grocery' && subCategory !== 'all') {
+      query = query.eq('subcategory', subCategory);
+    } else if (categorySlug !== 'grocery' && subCategory !== 'all') {
       query = query.eq('subcategory', subCategory);
     }
 
@@ -66,6 +85,10 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     'home-kitchen': 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg',
     'beauty-care': 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg',
     'health-wellness': 'https://images.pexels.com/photos/4498158/pexels-photo-4498158.jpeg',
+  };
+
+  const handleGroceryItemClick = (sub: SubcategoryItem) => {
+    onNavigate('product', { slug: sub.slug });
   };
 
   return (
@@ -95,8 +118,30 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
         </div>
       )}
 
-      {activeSubcategories.length > 0 && (
+      {(groceryGroups.length > 0 || activeSubcategories.length > 0) && (
         <div className="max-w-7xl mx-auto px-4 py-4 lg:hidden">
+          {categorySlug === 'grocery' && groceryGroups.length > 0 && (
+            <div className="mb-3">
+              <label htmlFor="grocery-group-select" className="sr-only">
+                Select grocery section
+              </label>
+              <select
+                id="grocery-group-select"
+                value={groceryGroup}
+                onChange={(event) => {
+                  setGroceryGroup(event.target.value);
+                  setSubCategory(event.target.value);
+                }}
+                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm"
+              >
+                {groceryGroups.map((group) => (
+                  <option key={group.slug} value={group.slug}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
             <button
               type="button"
@@ -108,10 +153,8 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
             {activeSubcategories.map((sub) => (
               <button
                 key={sub.slug}
-                onClick={() => setSubCategory(sub.slug)}
-                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  subCategory === sub.slug ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'
-                }`}
+                onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
+                className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-100 transition-colors"
               >
                 {sub.name}
               </button>
@@ -121,16 +164,43 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       )}
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
-        <aside className="hidden lg:block w-60 flex-shrink-0">
+        <aside className="hidden lg:block w-72 flex-shrink-0">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
-            {activeSubcategories.length > 0 && category && (
+            {categorySlug === 'grocery' && groceryGroups.length > 0 ? (
+              groceryGroups.map((group) => (
+                <div key={group.slug} className="mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setOpenCategories((prev) => ({ ...prev, [group.slug]: !(prev[group.slug] ?? true) }))}
+                    className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
+                  >
+                    <span>{group.name}</span>
+                    {(openCategories[group.slug] ?? true) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </button>
+                  {(openCategories[group.slug] ?? true) && (
+                    <div className="mt-2 space-y-2 pl-4">
+                      {group.items.map((sub) => (
+                        <button
+                          key={sub.slug}
+                          type="button"
+                          onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
+                          className="w-full text-left text-sm px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        >
+                          {sub.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : activeSubcategories.length > 0 && category ? (
               <div>
                 <button
                   type="button"
                   onClick={() => setOpenCategories((prev) => ({ ...prev, [categorySlug]: !(prev[categorySlug] ?? true) }))}
                   className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
                 >
-                  <span>Categories</span>
+                  <span>{category.name}</span>
                   {(openCategories[categorySlug] ?? true) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
                 {(openCategories[categorySlug] ?? true) && (
@@ -152,7 +222,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                   </div>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
         </aside>
 

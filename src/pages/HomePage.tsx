@@ -124,7 +124,13 @@ export default function HomePage({ onNavigate }: Props) {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {deals.map((p) => (
-                <ProductCard key={p.id} product={p} onNavigate={onNavigate} />
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onNavigate={onNavigate}
+                  disableAddToCart
+                  navigateToCategory
+                />
               ))}
             </div>
           </div>
