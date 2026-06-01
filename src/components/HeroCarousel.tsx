@@ -59,7 +59,7 @@ const SLIDES: Slide[] = [
     subtitle: 'Premium beauty and wellness products for your daily self-care routine.',
     cta: 'Shop Beauty',
     image: 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg',
-    categorySlug: 'beauty',
+    categorySlug: 'beauty-care',
     accent: 'from-fuchsia-500 to-rose-600',
     badge: 'Fan Favorites',
   },

@@ -5,6 +5,8 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/ProductCard';
+import ProductDetailsSection from '../components/ProductDetailsSection';
+import ProductAvailableQuantity from '../components/ProductAvailableQuantity';
 
 type Props = {
   productSlug: string;
@@ -118,18 +120,21 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 md:p-10">
           {/* Image section */}
           <div>
-            <div className="aspect-square rounded-2xl overflow-hidden bg-slate-50 mb-4 relative">
-              <img
-                src={imgError ? fallbackImage : (displayImages[activeImg] || fallbackImage)}
-                alt={product.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={() => setImgError(true)}
-              />
-              {product.is_new && (
-                <div className="absolute top-4 left-4 bg-emerald-500 text-white text-sm font-bold px-3 py-1.5 rounded-xl">
-                  NEW
-                </div>
-              )}
+            <div className="rounded-2xl overflow-hidden bg-slate-50 mb-4 border border-slate-100">
+              <div className="aspect-square relative">
+                <img
+                  src={imgError ? fallbackImage : (displayImages[activeImg] || fallbackImage)}
+                  alt={product.name}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  onError={() => setImgError(true)}
+                />
+                {product.is_new && (
+                  <div className="absolute top-4 left-4 bg-emerald-500 text-white text-sm font-bold px-3 py-1.5 rounded-xl">
+                    NEW
+                  </div>
+                )}
+              </div>
+              <ProductAvailableQuantity product={product} className="rounded-b-2xl" />
             </div>
             {displayImages.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-2">
@@ -261,12 +266,6 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
               Buy Now
             </button>
 
-            {/* Product Description */}
-            <div className="border-t border-slate-100 pt-6 mb-4">
-              <h3 className="text-base font-bold text-slate-900 mb-3">About This Product</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{product.description}</p>
-            </div>
-
             {/* Trust items */}
             <div className="grid grid-cols-3 gap-3">
               {[
@@ -283,6 +282,17 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
             </div>
           </div>
         </div>
+
+        <ProductDetailsSection
+          product={product}
+          onOrder={async () => {
+            if (product.stock_quantity > 0) {
+              await handleAddToCart();
+              onNavigate('checkout');
+            }
+          }}
+          orderDisabled={product.stock_quantity === 0}
+        />
 
         {/* Related Products */}
         {related.length > 0 && (

@@ -70,11 +70,14 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
   };
 
   const activeSubcategories = categorySubcategories[categorySlug] || [];
+  const sidebarCategories = category ? [category] : [];
 
   useEffect(() => {
-    // Ensure the active category dropdown is open when navigating to a category
-    setOpenCategories((prev) => ({ ...prev, [categorySlug]: true }));
+    setSubCategory('all');
+    setOpenCategories({ [categorySlug]: true });
+  }, [categorySlug]);
 
+  useEffect(() => {
     setLoading(true);
     let query = supabase.from('products').select('*, categories(*)');
 
@@ -218,33 +221,25 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
             {/* Categories */}
             
             <div>
-              <h4 className="font-semibold text-slate-700 text-sm mb-3">Categories</h4>
+              <h4 className="font-semibold text-slate-700 text-sm mb-3">
+                {category?.name || 'Categories'}
+              </h4>
               <div className="space-y-2">
-                {categories.map((cat) => {
+                {sidebarCategories.map((cat) => {
                   const subcategories = categorySubcategories[cat.slug] || [];
-                  const isActiveCategory = cat.slug === categorySlug;
                   const hasDropdown = subcategories.length > 0;
-                  const isOpen = openCategories[cat.slug] ?? false;
+                  const isOpen = openCategories[cat.slug] ?? true;
 
                   return (
                     <div key={cat.id}>
                       <button
+                        type="button"
                         onClick={() => {
-                          if (!isActiveCategory) {
-                            onNavigate('category', { slug: cat.slug });
-                            setSubCategory('all');
-                            if (hasDropdown) {
-                              setOpenCategories((prev) => ({ ...prev, [cat.slug]: true }));
-                            }
-                          } else if (hasDropdown) {
+                          if (hasDropdown) {
                             setOpenCategories((prev) => ({ ...prev, [cat.slug]: !isOpen }));
                           }
                         }}
-                        className={`w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors ${
-                          isActiveCategory
-                            ? 'bg-orange-50 text-orange-700 font-semibold'
-                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                        }`}
+                        className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
                       >
                         <span>{cat.name}</span>
                         {hasDropdown ? (
@@ -252,7 +247,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                         ) : null}
                       </button>
 
-                      {hasDropdown && isActiveCategory && isOpen && (
+                      {hasDropdown && isOpen && (
                         <div className="mt-2 space-y-2 pl-4">
                           <button
                             onClick={() => setSubCategory('all')}

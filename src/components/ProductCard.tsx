@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
+import ProductAvailableQuantity from './ProductAvailableQuantity';
 
 type Props = {
   product: Product;
@@ -106,6 +107,7 @@ export default function ProductCard({ product, onNavigate }: Props) {
             {added ? 'Added!' : 'Add to Cart'}
           </button>
         </div>
+        <ProductAvailableQuantity product={product} />
       </div>
 
       {/* Info */}
