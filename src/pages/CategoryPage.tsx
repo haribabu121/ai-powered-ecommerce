@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Filter, SlidersHorizontal, Grid, List, X, ChevronDown, ChevronUp, Home } from 'lucide-react';
+import { ChevronDown, ChevronUp, Home } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import CategoryCarousel from '../components/CategoryCarousel';
-import { supabase, Category, Product } from '../lib/supabase';
+import { supabase, Category, Product } from '../lib/supabase.ts';
+import { getSubcategoriesForCategory } from '../lib/categorySubcategories';
 
 type Props = {
   categorySlug: string;
@@ -15,62 +16,16 @@ type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'rating' | 'newest';
 export default function CategoryPage({ categorySlug, categories, onNavigate }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sort, setSort] = useState<SortOption>('featured');
+  const sort: SortOption = 'featured';
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [gridView, setGridView] = useState(true);
+  const gridView = true;
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({ electronics: true });
   const [subCategory, setSubCategory] = useState('all');
   const category = categories.find((c) => c.slug === categorySlug);
 
-  const categorySubcategories: Record<string, { slug: string; name: string }[]> = {
-    electronics: [
-      { slug: 'smartphones', name: 'Phones' },
-      { slug: 'laptops', name: 'Laptops' },
-      { slug: 'accessories', name: 'Accessories' },
-      { slug: 'cameras', name: 'Cameras' },
-    ],
-    fashion: [
-      { slug: 'tops', name: 'Tops' },
-      { slug: 'shoes', name: 'Shoes' },
-      { slug: 'menswear', name: 'Menswear' },
-    ],
-    'home-kitchen': [
-      { slug: 'appliances', name: 'Appliances' },
-      { slug: 'toilets', name: 'Toilets' },
-      { slug: 'tissues', name: 'Tissues' },
-    ],
-    'beauty-care': [
-      { slug: 'skincare', name: 'Skincare' },
-      { slug: 'makeup', name: 'Makeup' },
-      { slug: 'hair-care', name: 'Hair Care' },
-    ],
-    grocery: [
-      { slug: 'jaggery', name: 'Jaggery' },
-      { slug: 'cereals', name: 'Cereals' },
-      { slug: 'nuts', name: 'Nuts & Dry Fruits' },
-      { slug: 'flour', name: 'Flour' },
-      { slug: 'dals', name: 'Dals & Beans' },
-      { slug: 'rice-flour', name: 'Rice Flour' },
-      { slug: 'rice', name: 'Rice' },
-      { slug: 'spices', name: 'Spices' },
-    ],
-    // 'health-wellness': [
-    //   { slug: 'supplements', name: 'Supplements' },
-    //   { slug: 'fitness', name: 'Fitness' },
-    //   { slug: 'personal-care', name: 'Personal Care' },
-    //   { slug: 'nutrition', name: 'Nutrition' },
-    // ],
-    // gaming: [
-    //   { slug: 'consoles', name: 'Consoles' },
-    //   { slug: 'accessories', name: 'Accessories' },
-    //   { slug: 'games', name: 'Games' },
-    //   { slug: 'headsets', name: 'Headsets' },
-    // ],
-  };
-
-  const activeSubcategories = categorySubcategories[categorySlug] || [];
-  const sidebarCategories = category ? [category] : [];
+  const activeSubcategories = category
+    ? getSubcategoriesForCategory(categorySlug, category.name)
+    : [];
 
   useEffect(() => {
     setSubCategory('all');
@@ -111,7 +66,6 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     'home-kitchen': 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg',
     'beauty-care': 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg',
     'health-wellness': 'https://images.pexels.com/photos/4498158/pexels-photo-4498158.jpeg',
-    // 'gaming': 'https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg',
   };
 
   return (
@@ -151,14 +105,6 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
             >
               <Home size={16} />
             </button>
-            <button
-              onClick={() => setSubCategory('all')}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                subCategory === 'all' ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              All {category?.name}
-            </button>
             {activeSubcategories.map((sub) => (
               <button
                 key={sub.slug}
@@ -175,188 +121,42 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       )}
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
-        {/* Sidebar Filter - Desktop */}
         <aside className="hidden lg:block w-60 flex-shrink-0">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
-            {/* <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <SlidersHorizontal size={16} />
-              Filters
-            </h3> */}
-
-            {/* Price range */}
-            {/* <div className="mb-5">
-              <h4 className="font-semibold text-slate-700 text-sm mb-3">Price Range</h4>
-              <div className="space-y-3">
-                {[
-                  { label: 'Under $25', range: [0, 25] as [number, number] },
-                  { label: '$25 - $75', range: [25, 75] as [number, number] },
-                  { label: '$75 - $200', range: [75, 200] as [number, number] },
-                  { label: '$200 - $500', range: [200, 500] as [number, number] },
-                  { label: 'Over $500', range: [500, 10000] as [number, number] },
-                ].map(({ label, range }) => (
-                  <label key={label} className="flex items-center gap-2.5 cursor-pointer group">
-                    <input
-                      type="radio"
-                      name="price"
-                      checked={priceRange[0] === range[0] && priceRange[1] === range[1]}
-                      onChange={() => setPriceRange(range)}
-                      className="accent-orange-500"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900">{label}</span>
-                  </label>
-                ))}
-                <label className="flex items-center gap-2.5 cursor-pointer group">
-                  <input
-                    type="radio"
-                    name="price"
-                    checked={priceRange[0] === 0 && priceRange[1] === 2000}
-                    onChange={() => setPriceRange([0, 2000])}
-                    className="accent-orange-500"
-                  />
-                  <span className="text-sm text-slate-600 group-hover:text-slate-900">All Prices</span>
-                </label>
-              </div>
-            </div> */}
-
-            {/* Categories */}
-            
-            <div>
-              <h4 className="font-semibold text-slate-700 text-sm mb-3">
-                {category?.name || 'Categories'}
-              </h4>
-              <div className="space-y-2">
-                {sidebarCategories.map((cat) => {
-                  const subcategories = categorySubcategories[cat.slug] || [];
-                  const hasDropdown = subcategories.length > 0;
-                  const isOpen = openCategories[cat.slug] ?? true;
-
-                  return (
-                    <div key={cat.id}>
+            {activeSubcategories.length > 0 && category && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setOpenCategories((prev) => ({ ...prev, [categorySlug]: !(prev[categorySlug] ?? true) }))}
+                  className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
+                >
+                  <span>Categories</span>
+                  {(openCategories[categorySlug] ?? true) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                {(openCategories[categorySlug] ?? true) && (
+                  <div className="mt-2 space-y-2 pl-4">
+                    {activeSubcategories.map((sub) => (
                       <button
+                        key={sub.slug}
                         type="button"
-                        onClick={() => {
-                          if (hasDropdown) {
-                            setOpenCategories((prev) => ({ ...prev, [cat.slug]: !isOpen }));
-                          }
-                        }}
-                        className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
+                        onClick={() => setSubCategory(sub.slug)}
+                        className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
+                          subCategory === sub.slug
+                            ? 'bg-slate-100 text-slate-900 font-semibold'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
                       >
-                        <span>{cat.name}</span>
-                        {hasDropdown ? (
-                          isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />
-                        ) : null}
+                        {sub.name}
                       </button>
-
-                      {hasDropdown && isOpen && (
-                        <div className="mt-2 space-y-2 pl-4">
-                          <button
-                            onClick={() => setSubCategory('all')}
-                            className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
-                              subCategory === 'all'
-                                ? 'bg-slate-100 text-slate-900 font-semibold'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                            }`}
-                          >
-                            All {cat.name}
-                          </button>
-                          {subcategories.map((sub) => (
-                            <button
-                              key={sub.slug}
-                              onClick={() => setSubCategory(sub.slug)}
-                              className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
-                                subCategory === sub.slug
-                                  ? 'bg-slate-100 text-slate-900 font-semibold'
-                                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                              }`}
-                            >
-                              {sub.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </aside>
 
-        {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Toolbar */}
-          {/* <div className="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-100 shadow-sm px-4 py-3">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setFilterOpen(!filterOpen)}
-                className="lg:hidden flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50"
-              >
-                <Filter size={15} />
-                Filters
-              </button>
-              <span className="text-slate-500 text-sm hidden sm:block">{products.length} results</span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
-                className="text-sm border-2 border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:border-orange-400 cursor-pointer"
-              >
-                <option value="featured">Featured</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="rating">Best Rated</option>
-                <option value="newest">Newest</option>
-              </select>
-
-              <div className="flex border border-slate-200 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setGridView(true)}
-                  className={`p-2 transition-colors ${gridView ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                  <Grid size={16} />
-                </button>
-                <button
-                  onClick={() => setGridView(false)}
-                  className={`p-2 transition-colors ${!gridView ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white' : 'text-slate-500 hover:bg-slate-50'}`}
-                >
-                  <List size={16} />
-                </button>
-              </div>
-            </div>
-          </div> */}
-
-          {/* Mobile filter panel */}
-          {/* {filterOpen && (
-            <div className="lg:hidden bg-white rounded-xl border border-slate-100 shadow-sm p-5 mb-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-slate-900">Filters</h3>
-                <button onClick={() => setFilterOpen(false)}><X size={18} className="text-slate-500" /></button>
-              </div>
-              <h4 className="font-semibold text-slate-700 text-sm mb-2">Price Range</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { label: 'Under $25', range: [0, 25] as [number, number] },
-                  { label: '$25 - $75', range: [25, 75] as [number, number] },
-                  { label: '$75 - $200', range: [75, 200] as [number, number] },
-                  { label: '$200+', range: [200, 10000] as [number, number] },
-                ].map(({ label, range }) => (
-                  <button
-                    key={label}
-                    onClick={() => { setPriceRange(range); setFilterOpen(false); }}
-                    className={`text-sm px-3 py-2 rounded-lg border transition-colors ${
-                      priceRange[0] === range[0] ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white border-orange-400' : 'border-2 border-slate-200 text-slate-600 hover:border-orange-300'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )} */}
-
-          {/* Products grid */}
           {loading ? (
             <div className={`grid ${gridView ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'} gap-5`}>
               {Array.from({ length: 9 }).map((_, i) => (
@@ -373,7 +173,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20">
-              <div className="text-6xl mb-4">🔍</div>
+              <div className="text-6xl mb-4">??</div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">No products found</h3>
               <p className="text-slate-500 mb-6">Try adjusting your filters or browse other categories.</p>
               <button
