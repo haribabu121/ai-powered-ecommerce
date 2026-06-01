@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Filter, SlidersHorizontal, Grid, List, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Filter, SlidersHorizontal, Grid, List, X, ChevronDown, ChevronUp, Home } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import CategoryCarousel from '../components/CategoryCarousel';
 import { supabase, Category, Product } from '../lib/supabase';
@@ -25,7 +25,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
 
   const categorySubcategories: Record<string, { slug: string; name: string }[]> = {
     electronics: [
-      { slug: 'smartphones', name: 'Smartphones' },
+      { slug: 'smartphones', name: 'Phones' },
       { slug: 'laptops', name: 'Laptops' },
       { slug: 'accessories', name: 'Accessories' },
       { slug: 'cameras', name: 'Cameras' },
@@ -46,14 +46,14 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       { slug: 'hair-care', name: 'Hair Care' },
     ],
     grocery: [
-      { slug: 'jaggery', name: 'Jaggery (2)' },
-      { slug: 'cereals', name: 'Cereals (4)' },
-      { slug: 'nuts', name: 'Nuts & Dry Fruits (9)' },
-      { slug: 'flour', name: 'Flour (3)' },
-      { slug: 'dals', name: 'Dals & Beans (4)' },
-      { slug: 'rice-flour', name: 'Rice Flour (2)' },
-      { slug: 'rice', name: 'Rice (8)' },
-      { slug: 'spices', name: 'Spices (46)' },
+      { slug: 'jaggery', name: 'Jaggery' },
+      { slug: 'cereals', name: 'Cereals' },
+      { slug: 'nuts', name: 'Nuts & Dry Fruits' },
+      { slug: 'flour', name: 'Flour' },
+      { slug: 'dals', name: 'Dals & Beans' },
+      { slug: 'rice-flour', name: 'Rice Flour' },
+      { slug: 'rice', name: 'Rice' },
+      { slug: 'spices', name: 'Spices' },
     ],
     // 'health-wellness': [
     //   { slug: 'supplements', name: 'Supplements' },
@@ -68,6 +68,8 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     //   { slug: 'headsets', name: 'Headsets' },
     // ],
   };
+
+  const activeSubcategories = categorySubcategories[categorySlug] || [];
 
   useEffect(() => {
     // Ensure the active category dropdown is open when navigating to a category
@@ -110,7 +112,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 md:pt-28">
+    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
       {/* Category Header */}
       {['electronics', 'fashion', 'home-kitchen', 'beauty-care', 'grocery'].includes(categorySlug) && category ? (
         <CategoryCarousel categorySlug={categorySlug} categoryName={category.name} />
@@ -132,6 +134,39 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
               <h1 className="text-3xl md:text-5xl font-black text-white">{category?.name || 'All Products'}</h1>
               <p className="text-slate-300 text-sm mt-2">{products.length} products</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {activeSubcategories.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 py-4 lg:hidden">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            <button
+              type="button"
+              onClick={() => onNavigate('home')}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-colors"
+            >
+              <Home size={16} />
+            </button>
+            <button
+              onClick={() => setSubCategory('all')}
+              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                subCategory === 'all' ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              All {category?.name}
+            </button>
+            {activeSubcategories.map((sub) => (
+              <button
+                key={sub.slug}
+                onClick={() => setSubCategory(sub.slug)}
+                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  subCategory === sub.slug ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {sub.name}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -255,7 +290,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
         {/* Main content */}
         <div className="flex-1 min-w-0">
           {/* Toolbar */}
-          <div className="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-100 shadow-sm px-4 py-3">
+          {/* <div className="flex items-center justify-between mb-6 bg-white rounded-xl border border-slate-100 shadow-sm px-4 py-3">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
@@ -295,10 +330,10 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Mobile filter panel */}
-          {filterOpen && (
+          {/* {filterOpen && (
             <div className="lg:hidden bg-white rounded-xl border border-slate-100 shadow-sm p-5 mb-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-slate-900">Filters</h3>
@@ -324,7 +359,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Products grid */}
           {loading ? (

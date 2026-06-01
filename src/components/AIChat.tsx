@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   X, Send, Bot, User, Minimize2, Maximize2,
-  ShoppingCart, Package, Search, Star, Truck, RotateCcw, Loader2, Sparkles
+  ShoppingCart, Package, Search, Star, Truck, RotateCcw, Loader2, Sparkles, ArrowUp
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getSessionId } from '../lib/session';
@@ -135,7 +135,7 @@ export default function AIChat() {
 
   return (
     <>
-      {/* Floating button - bottom right */}
+      {/* Floating buttons - bottom right */}
       <div className="fixed right-6 bottom-6 z-50 flex flex-col items-center gap-3">
         <button
           onClick={() => { setOpen(!open); setMinimized(false); }}
@@ -167,6 +167,15 @@ export default function AIChat() {
               {unread}
             </span>
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-900 text-white shadow-2xl hover:bg-slate-800 transition-colors"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={22} />
         </button>
 
         <div className="flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">

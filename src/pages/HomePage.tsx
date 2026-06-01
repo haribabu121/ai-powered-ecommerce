@@ -16,12 +16,22 @@ export default function HomePage({ onNavigate }: Props) {
   const [trendingSlide, setTrendingSlide] = useState(0);
   const [bannerIndex, setBannerIndex] = useState(0);
   const TOP_TRENDING_STEP = 4;
+  const FEATURED_DEAL_SLUGS = [
+    'iphone-15-pro-max',
+    'macbook-pro-14',
+    'classic-leather-jacket',
+    'smart-coffee-maker',
+    'classic-bathtub',
+    'vitamin-c-serum',
+    'dry-dates-natural',
+    'red-chilli-powder-spicy',
+  ];
 
   useEffect(() => {
     (async () => {
       const [bestRes, dealsRes, trendingRes] = await Promise.all([
         supabase.from('products').select('*, categories(*)').eq('is_bestseller', true).limit(8),
-        supabase.from('products').select('*, categories(*)').lt('price', 50).order('price', { ascending: true }).limit(8),
+        supabase.from('products').select('*, categories(*)').in('slug', FEATURED_DEAL_SLUGS),
         supabase
           .from('products')
           .select('*, categories(*)')
@@ -29,7 +39,12 @@ export default function HomePage({ onNavigate }: Props) {
           .limit(16),
       ]);
       setBestsellers(bestRes.data || []);
-      setDeals(dealsRes.data || []);
+      const dealsData = dealsRes.data || [];
+      setDeals(
+        FEATURED_DEAL_SLUGS.map((slug) => dealsData.find((product) => product.slug === slug)).filter(
+          (product): product is Product => Boolean(product),
+        ),
+      );
       setTrending(trendingRes.data || []);
     })();
   }, []);
@@ -58,7 +73,7 @@ export default function HomePage({ onNavigate }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <div className="pt-20 md:pt-24">
+      <div className="pt-32 lg:pt-28">
         <HeroCarousel onNavigate={onNavigate} />
       </div>
 

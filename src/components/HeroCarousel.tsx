@@ -21,7 +21,7 @@ const SLIDES: Slide[] = [
     image: 'https://images.pexels.com/photos/11969081/pexels-photo-11969081.jpeg',
     categorySlug: 'electronics',
     accent: 'from-cyan-500 to-blue-600',
-    badge: 'Up to 40% Off',
+    badge: 'Tech Picks',
   },
   {
     id: '2',

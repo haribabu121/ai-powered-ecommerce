@@ -61,11 +61,11 @@ const CATEGORY_CAROUSELS: Record<string, CarouselSlide[]> = {
     },
     {
       id: '2',
-      image: 'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',
+      image: 'https://m.media-amazon.com/images/I/414GuM0i0xL._AC_UL480_FMwebp_QL65_.jpg',
     },
     {
       id: '3',
-      image: 'https://images.pexels.com/photos/3622622/pexels-photo-3622622.jpeg',
+      image: 'https://m.media-amazon.com/images/I/51TjBxQilYL._AC_UL480_FMwebp_QL65_.jpg',
     },
   ],
   grocery: [
@@ -101,7 +101,7 @@ export default function CategoryCarousel({ categorySlug, categoryName }: Props) 
   };
 
   return (
-    <div className="relative h-48 md:h-64 overflow-hidden rounded-none">
+    <div className="relative h-56 md:h-64 overflow-hidden rounded-none bg-slate-900/5">
       {/* Slides */}
       {slides.map((slide, i) => (
         <div
@@ -113,7 +113,7 @@ export default function CategoryCarousel({ categorySlug, categoryName }: Props) 
           <img
             src={slide.image}
             alt={`${categoryName} slide ${i + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain md:object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent" />
         </div>
