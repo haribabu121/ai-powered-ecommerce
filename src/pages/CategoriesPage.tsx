@@ -9,9 +9,9 @@ export default function CategoriesPage({ categories, onNavigate }: Props) {
   const fallback = 'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg';
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-6">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="mb-6">
+    <div className="bg-slate-50 pt-6">
+      <div className="max-w-7xl mx-auto px-4 pt-6 pb-0">
+        <div className="mb-4">
           <h1 className="text-2xl md:text-3xl font-black text-slate-900">Shop by Category</h1>
           <p className="text-slate-500 text-sm mt-1">Browse all departments</p>
         </div>
