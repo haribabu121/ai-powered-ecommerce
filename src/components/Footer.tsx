@@ -50,7 +50,7 @@ export default function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="bg-white text-gray-700">
       {/* Newsletter Subscription Section */}
-      <div className="border-b border-gray-200 px-4 py-12">
+      <div className="border-b border-gray-200 px-4 pt-8 pb-10">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">Sign Up For MartX Updates</h2>
           <p className="text-gray-600 mb-6 text-sm">Get 15% OFF, and exclusive access to new products and future discounts.</p>

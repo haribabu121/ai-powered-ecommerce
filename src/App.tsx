@@ -165,7 +165,7 @@ function AppInner() {
           currentPage={getCurrentPageKey()}
         />
       )}
-      <main className="flex-1">
+      <main className={page.name === 'categories' ? '' : 'flex-1'}>
         {renderPage()}
       </main>
       {!hideHeaderFooter && <Footer onNavigate={onNavigate} />}
