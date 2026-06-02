@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight,CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
 import PromoBannerCarousel from '../components/PromoBannerCarousel';
 import FAQ from '../components/FAQ';
@@ -63,7 +63,7 @@ export default function HomePage({ onNavigate }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <div className="pt-32 lg:pt-28">
+      <div className="pt-4">
         <HeroCarousel onNavigate={onNavigate} />
       </div>
 
@@ -102,7 +102,7 @@ export default function HomePage({ onNavigate }: Props) {
        */}
 
       {/* Today's Deals */}
-      {/* {deals.length > 0 && (
+      {deals.length > 0 && (
         <section className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 py-14">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
@@ -135,7 +135,7 @@ export default function HomePage({ onNavigate }: Props) {
             </div>
           </div>
         </section>
-      )} */}
+      )}
 
       {/* Featured Products */}
       {/* {featured.length > 0 && (

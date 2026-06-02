@@ -22,7 +22,7 @@ export default function CartPage({ onNavigate }: Props) {
   const { formatPrice } = useCurrency();
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
+    <div className="min-h-screen bg-slate-50 pt-6">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">

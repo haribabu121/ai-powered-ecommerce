@@ -107,7 +107,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
+    <div className="min-h-screen bg-slate-50 pt-6">
       {/* Category Header */}
       {['electronics', 'fashion', 'home-kitchen', 'beauty-care', 'grocery'].includes(categorySlug) && category ? (
         <CategoryCarousel categorySlug={categorySlug} categoryName={category.name} onNavigate={onNavigate} />

@@ -48,10 +48,11 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
       onClick={() => onNavigate('home')}
       className="flex items-center gap-2 flex-shrink-0"
     >
-      <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-rose-500 rounded-xl flex items-center justify-center shadow-md">
-        <Home size={20} className="text-white" />
+      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-400 to-rose-500 rounded-xl flex items-center justify-center shadow-md">
+        <Home size={18} className="text-white sm:hidden" />
+        <Home size={20} className="text-white hidden sm:block" />
       </div>
-      <span className="text-slate-800 font-extrabold text-xl">
+      <span className="hidden sm:inline text-slate-800 font-extrabold text-lg sm:text-xl">
         Mart<span className="text-orange-500">X</span>
       </span>
     </button>
@@ -79,16 +80,17 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
   );
 
   const rightActions = (
-    <div className="flex items-center gap-2 flex-nowrap">
+    <div className="flex items-center gap-0.5 sm:gap-2 flex-nowrap">
       <div className="relative">
         <button
           onClick={() => user ? setUserMenuOpen(!userMenuOpen) : onNavigate('signin')}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+          className="flex items-center gap-1 px-1 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-            {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={22} />}
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+            {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={18} className="sm:hidden" />}
+            {!user && <User size={22} className="hidden sm:block" />}
           </div>
-          <span className="hidden md:block text-sm font-medium text-slate-700 max-w-[120px] truncate">
+          <span className="text-[11px] sm:text-sm font-medium text-slate-700 max-w-[72px] sm:max-w-[120px] truncate">
             {user ? (profile?.full_name || 'Account') : 'Sign In'}
           </span>
           {user && <ChevronDown size={14} className="text-slate-400" />}
@@ -136,9 +138,10 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('wishlist')}
-        className="relative p-2.5 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+        className="relative p-1.5 sm:p-2.5 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
       >
-        <Heart size={22} />
+        <Heart size={20} className="sm:hidden" />
+        <Heart size={22} className="hidden sm:block" />
         {wishlistItems.length > 0 && (
           <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
             {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
@@ -149,12 +152,12 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
       <div className="relative">
         <button
           onClick={() => setCurrencyOpen(!currencyOpen)}
-          className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-sm text-slate-700"
+          className="flex items-center gap-1 px-1.5 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-[11px] sm:text-sm text-slate-700"
         >
           <img
             src={currency === 'CAD' ? 'https://flagcdn.com/w40/ca.png' : 'https://flagcdn.com/w40/us.png'}
             alt={currency}
-            className="w-5 h-5 rounded-full object-cover"
+            className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover"
           />
           <span className="font-medium">{currency === 'CAD' ? 'CA' : 'US'}</span>
           <ChevronDown size={14} className="text-slate-400" />
@@ -182,7 +185,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('cart')}
-        className="relative flex items-center gap-2 bg-gradient-to-r from-orange-400 to-rose-500 text-white px-3 py-2 rounded-xl hover:shadow-lg transition-all"
+        className="relative flex items-center gap-1.5 bg-gradient-to-r from-orange-400 to-rose-500 text-white px-2.5 py-2 rounded-xl hover:shadow-lg transition-all"
       >
         <div className="relative">
           <ShoppingCart size={20} />
@@ -192,51 +195,80 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
             </span>
           )}
         </div>
-        <span className="hidden sm:block font-semibold text-sm">Cart</span>
+        <span className="font-semibold text-[11px] sm:text-sm">Cart</span>
       </button>
 
     </div>
   );
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header className={` transition-all duration-300 ${
       scrolled ? 'bg-white shadow-lg' : 'bg-white'
     }`}>
-      <div className="px-4 lg:px-8 py-3">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-2 flex-nowrap">
+      <div className="px-3 sm:px-4 lg:px-8 py-2 sm:py-3">
+        <div className="flex flex-col gap-2.5 sm:gap-3">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 flex-nowrap">
             {logoButton}
             <div className="flex-1 min-w-0">
-              {searchForm('min-w-0', 'h-10 text-sm')}
+              {searchForm('min-w-0', 'h-10 sm:h-12 text-sm sm:text-base rounded-xl sm:rounded-2xl px-3 sm:px-4')}
             </div>
             {rightActions}
           </div>
 
-          <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap pb-2">
-        <button
-          onClick={() => onNavigate('home')}
-          className={`text-xs md:text-sm px-3 md:px-4 py-2 rounded-full font-medium transition-colors ${
-            currentPage === 'home'
-              ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
-              : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
-          }`}
-        >
-          Home
-        </button>
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => onNavigate('category', { slug: cat.slug })}
-            className={`text-xs md:text-sm px-3 md:px-4 py-2 rounded-full font-medium transition-colors ${
-              currentPage === `category-${cat.slug}`
-                ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
-                : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
-            }`}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
+          {/* Mobile tabs row: one line, no horizontal scrolling */}
+          <div className="grid grid-cols-6 gap-1 pb-1.5 lg:hidden">
+            <button
+              onClick={() => onNavigate('home')}
+              className={`px-1.5 py-2 rounded-lg text-[10px] sm:text-xs font-semibold leading-none truncate transition-colors ${
+                currentPage === 'home'
+                  ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-sm'
+                  : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-600'
+              }`}
+            >
+              Home
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => onNavigate('category', { slug: cat.slug })}
+                className={`px-1.5 py-2 rounded-lg text-[10px] sm:text-xs font-semibold leading-none truncate transition-colors ${
+                  currentPage === `category-${cat.slug}`
+                    ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-sm'
+                    : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-orange-600'
+                }`}
+                title={cat.name}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop/Laptop tabs row: more gap between tabs */}
+          <div className="hidden lg:flex items-center gap-2 px-1 py-1.5 border-t border-slate-100">
+            <button
+              onClick={() => onNavigate('home')}
+              className={`text-sm px-4 py-2 rounded-full font-medium transition-colors ${
+                currentPage === 'home'
+                  ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
+                  : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
+              }`}
+            >
+              Home
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => onNavigate('category', { slug: cat.slug })}
+                className={`text-sm px-4 py-2 rounded-full font-medium transition-colors ${
+                  currentPage === `category-${cat.slug}`
+                    ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
+                    : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
     </div>
   </div>
 </header>
