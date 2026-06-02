@@ -143,7 +143,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-6">
+    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button onClick={() => onNavigate('cart')} className="flex items-center gap-2 text-slate-500 hover:text-slate-700 text-sm mb-6">
           <ArrowLeft size={16} />

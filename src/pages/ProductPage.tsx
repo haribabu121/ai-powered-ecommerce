@@ -98,7 +98,7 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
   const displayImages = images.length > 0 ? images : [fallbackImage];
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-6">
+    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-4">
         <nav className="flex items-center gap-2 text-sm text-slate-500">

@@ -16,10 +16,12 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage.tsx';
 import OrdersPage from './pages/OrdersPage.tsx';
 import WishlistPage from './pages/WishlistPage';
+import CategoriesPage from './pages/CategoriesPage';
 import { supabase, Category, filterCategoriesForNav, normalizeCategorySlug } from './lib/supabase';
 
 type Page =
   | { name: 'home' }
+  | { name: 'categories' }
   | { name: 'category'; slug: string }
   | { name: 'product'; slug: string }
   | { name: 'cart' }
@@ -50,6 +52,7 @@ function AppInner() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     switch (pageName) {
       case 'home': setPage({ name: 'home' }); break;
+      case 'categories': setPage({ name: 'categories' }); break;
       case 'category': setPage({ name: 'category', slug: normalizeCategorySlug(params?.slug || '') }); break;
       case 'product': setPage({ name: 'product', slug: params?.slug || '' }); break;
       case 'cart': setPage({ name: 'cart' }); break;
@@ -80,6 +83,8 @@ function AppInner() {
     switch (page.name) {
       case 'home':
         return <HomePage onNavigate={onNavigate} />;
+      case 'categories':
+        return <CategoriesPage categories={categories} onNavigate={onNavigate} />;
       case 'category':
         return (
           <CategoryPage

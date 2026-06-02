@@ -115,7 +115,7 @@ export default function CategoryCarousel({ categorySlug, categoryName, onNavigat
             alt={`${categoryName} slide ${i + 1}`}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent" />
+          <div className="relative inset-1 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent" />
         </div>
       ))}
 

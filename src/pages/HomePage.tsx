@@ -63,7 +63,7 @@ export default function HomePage({ onNavigate }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <div className="pt-4">
+      <div className="pt-0">
         <HeroCarousel onNavigate={onNavigate} />
       </div>
 
@@ -116,7 +116,7 @@ export default function HomePage({ onNavigate }: Props) {
                 </div>
               </div>
               <button
-                onClick={() => onNavigate('deals')}
+                onClick={() => onNavigate('categories')}
                 className="hidden sm:flex items-center gap-2 bg-white text-orange-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-orange-50 transition-colors shadow-lg"
               >
                 View All <ArrowRight size={16} />
