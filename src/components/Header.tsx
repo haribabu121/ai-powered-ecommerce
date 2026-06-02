@@ -82,19 +82,19 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
   const rightActions = (
     <div className="flex items-center gap-0.5 sm:gap-2 flex-nowrap">
       <div className="relative">
-        <button
+        {/* <button
           onClick={() => user ? setUserMenuOpen(!userMenuOpen) : onNavigate('signin')}
           className="flex items-center gap-1 px-1 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
         >
           <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
             {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={18} className="sm:hidden" />}
             {!user && <User size={22} className="hidden sm:block" />}
-          </div>
-          <span className="text-[11px] sm:text-sm font-medium text-slate-700 max-w-[72px] sm:max-w-[120px] truncate">
+          </div> */}
+          {/* <span className="text-[11px] sm:text-sm font-medium text-slate-700 max-w-[72px] sm:max-w-[120px] truncate">
             {user ? (profile?.full_name || 'Account') : 'Sign In'}
-          </span>
+          </span> */}
           {user && <ChevronDown size={14} className="text-slate-400" />}
-        </button>
+        {/* </button> */}
 
         {user && userMenuOpen && (
           <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
@@ -148,6 +148,15 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
           </span>
         )}
       </button>
+      <button
+          onClick={() => user ? setUserMenuOpen(!userMenuOpen) : onNavigate('signin')}
+          className="flex items-center gap-1 px-1 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+        >
+          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+            {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={18} className="sm:hidden" />}
+            {!user && <User size={22} className="hidden sm:block" />}
+          </div>
+          </button>
 
       <div className="relative">
         <button
