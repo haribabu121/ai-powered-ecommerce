@@ -142,18 +142,18 @@ export default function HeroCarousel({ onNavigate }: Props) {
       </div>
 
       {/* Arrows */}
-      <button
+      {/* <button
         onClick={() => go(current - 1)}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-110 border border-white/20"
       >
         <ChevronLeft size={22} />
-      </button>
-      <button
+      </button> */}
+      {/* <button
         onClick={() => go(current + 1)}
         className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-110 border border-white/20"
       >
         <ChevronRight size={22} />
-      </button>
+      </button> */}
 
       {/* Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">

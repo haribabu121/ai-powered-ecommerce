@@ -29,12 +29,21 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
   const [groceryGroup, setGroceryGroup] = useState('jaggery');
   const category = categories.find((c) => c.slug === categorySlug);
 
+  const isAllProductsPage = categorySlug === '';
   const groceryGroups = categorySlug === 'grocery' ? getGrocerySubcategoryGroups() : [];
   const activeSubcategories = categorySlug === 'grocery'
     ? getGrocerySubcategoriesForGroup(groceryGroup)
     : category
       ? getSubcategoriesForCategory(categorySlug, category.name)
       : [];
+  const allProductsCategories = categories.filter((cat) => (
+    getSubcategoriesForCategory(cat.slug, cat.name).length > 0
+  ));
+  const showSidebar = categorySlug === 'grocery'
+    ? groceryGroups.length > 0
+    : isAllProductsPage
+      ? allProductsCategories.length > 0
+      : activeSubcategories.length > 0 && !!category;
 
   useEffect(() => {
     if (categorySlug === 'grocery') {
@@ -45,9 +54,15 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       return;
     }
 
+    if (isAllProductsPage) {
+      setSubCategory('all');
+      setOpenCategories(Object.fromEntries(allProductsCategories.map((cat) => [cat.slug, false])));
+      return;
+    }
+
     setSubCategory('all');
     setOpenCategories({ [categorySlug]: true });
-  }, [categorySlug, groceryGroups]);
+  }, [categorySlug, groceryGroups, allProductsCategories, isAllProductsPage]);
 
   useEffect(() => {
     setLoading(true);
@@ -95,7 +110,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
       {/* Category Header */}
       {['electronics', 'fashion', 'home-kitchen', 'beauty-care', 'grocery'].includes(categorySlug) && category ? (
-        <CategoryCarousel categorySlug={categorySlug} categoryName={category.name} />
+        <CategoryCarousel categorySlug={categorySlug} categoryName={category.name} onNavigate={onNavigate} />
       ) : (
         <div className="relative h-48 md:h-64 overflow-hidden">
           <img
@@ -118,7 +133,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
         </div>
       )}
 
-      {(groceryGroups.length > 0 || activeSubcategories.length > 0) && (
+      {showSidebar && (
         <div className="max-w-7xl mx-auto px-4 py-4 lg:hidden">
           {categorySlug === 'grocery' && groceryGroups.length > 0 && (
             <div className="mb-3">
@@ -150,15 +165,31 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
             >
               <Home size={16} />
             </button>
-            {activeSubcategories.map((sub) => (
-              <button
-                key={sub.slug}
-                onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
-                className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-100 transition-colors"
-              >
-                {sub.name}
-              </button>
-            ))}
+            {isAllProductsPage ? (
+              allProductsCategories.map((cat) => (
+                <button
+                  key={cat.slug}
+                  onClick={() => setOpenCategories((prev) => ({ ...prev, [cat.slug]: true }))}
+                  className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-100 transition-colors"
+                >
+                  {cat.name}
+                </button>
+              ))
+            ) : (
+              activeSubcategories.map((sub) => (
+                <button
+                  key={sub.slug}
+                  onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
+                  className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    subCategory === sub.slug
+                      ? 'bg-slate-100 text-slate-900 font-semibold'
+                      : 'text-slate-600 bg-white hover:bg-slate-100'
+                  }`}
+                >
+                  {sub.name}
+                </button>
+              ))
+            )}
           </div>
         </div>
       )}
@@ -166,6 +197,11 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
         <aside className="hidden lg:block w-72 flex-shrink-0">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
+            {isAllProductsPage ? (
+              <div className="mb-4">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Categories</h2>
+              </div>
+            ) : null}
             {categorySlug === 'grocery' && groceryGroups.length > 0 ? (
               groceryGroups.map((group) => (
                 <div key={group.slug} className="mb-4">
@@ -193,6 +229,40 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                   )}
                 </div>
               ))
+            ) : isAllProductsPage && allProductsCategories.length > 0 ? (
+              allProductsCategories.map((cat) => {
+                const subcats = getSubcategoriesForCategory(cat.slug, cat.name);
+                return (
+                  <div key={cat.slug} className="mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setOpenCategories((prev) => ({ ...prev, [cat.slug]: !(prev[cat.slug] ?? false) }))}
+                      className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
+                    >
+                      <span>{cat.name}</span>
+                      {(openCategories[cat.slug] ?? false) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    {(openCategories[cat.slug] ?? false) && (
+                      <div className="mt-2 space-y-2 pl-4">
+                        {subcats.map((sub) => (
+                          <button
+                            key={sub.slug}
+                            type="button"
+                            onClick={() => setSubCategory(sub.slug)}
+                            className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
+                              subCategory === sub.slug
+                                ? 'bg-slate-100 text-slate-900 font-semibold'
+                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            }`}
+                          >
+                            {sub.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
             ) : activeSubcategories.length > 0 && category ? (
               <div>
                 <button

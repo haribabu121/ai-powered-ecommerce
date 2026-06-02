@@ -136,7 +136,7 @@ export default function AIChat() {
   return (
     <>
       {/* Floating buttons - bottom right */}
-      <div className="fixed right-6 bottom-6 z-50 flex flex-col items-center gap-3">
+     <div className="fixed -bottom-4 right-6 z-50 flex flex-col items-center gap-0">
         <button
           onClick={() => { setOpen(!open); setMinimized(false); }}
           className="group relative w-16 h-16 bg-gradient-to-br from-orange-400 via-rose-500 to-pink-500 rounded-2xl shadow-2xl hover:shadow-[0_20px_40px_rgba(251,146,60,0.4)] flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
@@ -169,14 +169,14 @@ export default function AIChat() {
           )}
         </button>
 
-        <button
+        {/* <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-900 text-white shadow-2xl hover:bg-slate-800 transition-colors"
           aria-label="Scroll to top"
         >
           <ArrowUp size={22} />
-        </button>
+        </button> */}
 
         <div className="flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
           {!open && (

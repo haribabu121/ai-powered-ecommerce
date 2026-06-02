@@ -88,14 +88,14 @@ function AppInner() {
             onNavigate={onNavigate}
           />
         );
-      case 'deals':
-        return (
-          <CategoryPage
-            categorySlug="deals"
-            categories={categories}
-            onNavigate={onNavigate}
-          />
-        );
+      // case 'deals':
+      //   return (
+      //     <CategoryPage
+      //       categorySlug="deals"
+      //       categories={categories}
+      //       onNavigate={onNavigate}
+      //     />
+      //   );
       case 'products':
         return (
           <CategoryPage

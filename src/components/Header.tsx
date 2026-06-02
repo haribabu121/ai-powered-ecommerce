@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, ShoppingCart, Search, User, Menu, X, Heart, Package, LogOut, ChevronDown } from 'lucide-react';
+import { Home, ShoppingCart, Search, User, Heart, Package, LogOut, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -18,7 +18,6 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
   const { user, profile, signOut } = useAuth();
   const { items: wishlistItems } = useWishlist();
   const [searchQuery, setSearchQuery] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
@@ -137,7 +136,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('wishlist')}
-        className="relative p-2.5 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors hidden sm:block"
+        className="relative p-2.5 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
       >
         <Heart size={22} />
         {wishlistItems.length > 0 && (
@@ -147,10 +146,10 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
         )}
       </button>
 
-      <div className="relative hidden sm:block">
+      <div className="relative">
         <button
           onClick={() => setCurrencyOpen(!currencyOpen)}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-sm text-slate-700"
+          className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-sm text-slate-700"
         >
           <img
             src={currency === 'CAD' ? 'https://flagcdn.com/w40/ca.png' : 'https://flagcdn.com/w40/us.png'}
@@ -183,7 +182,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('cart')}
-        className="relative flex items-center gap-2 bg-gradient-to-r from-orange-400 to-rose-500 text-white px-4 py-2.5 rounded-xl hover:shadow-lg transition-all"
+        className="relative flex items-center gap-2 bg-gradient-to-r from-orange-400 to-rose-500 text-white px-3 py-2 rounded-xl hover:shadow-lg transition-all"
       >
         <div className="relative">
           <ShoppingCart size={20} />
@@ -196,12 +195,6 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
         <span className="hidden sm:block font-semibold text-sm">Cart</span>
       </button>
 
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="lg:hidden p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl"
-      >
-        {menuOpen ? <X size={22} /> : <Menu size={22} />}
-      </button>
     </div>
   );
 
@@ -209,29 +202,20 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-white shadow-lg' : 'bg-white'
     }`}>
-      <div className="px-4 lg:px-8">
-        {/* Mobile: MartX + Sign In row, search below */}
-        <div className="lg:hidden">
-          <div className="flex items-center justify-between h-16">
+      <div className="px-4 lg:px-8 py-3">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-2 flex-nowrap">
             {logoButton}
+            <div className="flex-1 min-w-0">
+              {searchForm('min-w-0', 'h-10 text-sm')}
+            </div>
             {rightActions}
           </div>
-          {searchForm('pb-3', 'h-14')}
-        </div>
 
-        {/* Desktop: MartX | search | Sign In on one line */}
-        <div className="hidden lg:flex items-center h-16 gap-4">
-          {logoButton}
-          {searchForm('flex-1 min-w-0 max-w-2xl mx-2')}
-          {rightActions}
-        </div>
-      </div>
-
-      {/* Category nav - horizontal pills */}
-      <div className="hidden lg:flex items-center gap-1 px-8 py-2 border-t border-slate-100">
+          <div className="flex items-center gap-1 overflow-x-auto whitespace-nowrap pb-2">
         <button
           onClick={() => onNavigate('home')}
-          className={`text-sm px-4 py-2 rounded-full font-medium transition-colors ${
+          className={`text-xs md:text-sm px-3 md:px-4 py-2 rounded-full font-medium transition-colors ${
             currentPage === 'home'
               ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
               : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
@@ -243,7 +227,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
           <button
             key={cat.id}
             onClick={() => onNavigate('category', { slug: cat.slug })}
-            className={`text-sm px-4 py-2 rounded-full font-medium transition-colors ${
+            className={`text-xs md:text-sm px-3 md:px-4 py-2 rounded-full font-medium transition-colors ${
               currentPage === `category-${cat.slug}`
                 ? 'bg-gradient-to-r from-orange-400 to-rose-500 text-white shadow-md'
                 : 'text-slate-600 hover:bg-orange-50 hover:text-orange-600'
@@ -252,54 +236,9 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
             {cat.name}
           </button>
         ))}
-        <button
-          onClick={() => onNavigate('deals')}
-          className="bg-orange-100 text-orange-600 hover:bg-orange-200 text-sm px-4 py-2 rounded-full font-semibold transition-colors"
-        >
-          Hot Deals
-        </button>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="lg:hidden bg-white border-t border-slate-100 px-4 py-4 shadow-lg">
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => { onNavigate('category', { slug: cat.slug }); setMenuOpen(false); }}
-                className="text-left text-slate-600 hover:text-orange-500 text-sm px-4 py-3 rounded-xl hover:bg-orange-50 transition-colors"
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-          <div className="border-t border-slate-100 pt-4 flex gap-2">
-            <button
-              onClick={() => { onNavigate('orders'); setMenuOpen(false); }}
-              className="flex-1 text-center text-slate-600 hover:text-orange-500 text-sm px-4 py-3 rounded-xl hover:bg-orange-50"
-            >
-              Orders
-            </button>
-            <button
-              onClick={() => { onNavigate('wishlist'); setMenuOpen(false); }}
-              className="flex-1 text-center text-slate-600 hover:text-orange-500 text-sm px-4 py-3 rounded-xl hover:bg-orange-50"
-            >
-              Wishlist
-            </button>
-          </div>
-          {!user && (
-            <div className="border-t border-slate-100 pt-4 mt-4 flex gap-2">
-              <button
-                onClick={() => { onNavigate('signin'); setMenuOpen(false); }}
-                className="flex-1 bg-gradient-to-r from-orange-400 to-rose-500 text-white text-sm font-semibold py-3 rounded-xl"
-              >
-                Sign In
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-    </header>
+    </div>
+  </div>
+</header>
   );
 }

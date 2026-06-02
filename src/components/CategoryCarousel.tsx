@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Props = {
   categorySlug: string;
   categoryName: string;
+  onNavigate: (page: string, params?: Record<string, string>) => void;
 };
 
 interface CarouselSlide {
@@ -84,7 +84,7 @@ const CATEGORY_CAROUSELS: Record<string, CarouselSlide[]> = {
   ],
 };
 
-export default function CategoryCarousel({ categorySlug, categoryName }: Props) {
+export default function CategoryCarousel({ categorySlug, categoryName, onNavigate }: Props) {
   const [current, setCurrentSlide] = useState(0);
   const slides = CATEGORY_CAROUSELS[categorySlug] || CATEGORY_CAROUSELS.electronics;
 
@@ -101,7 +101,7 @@ export default function CategoryCarousel({ categorySlug, categoryName }: Props) 
   };
 
   return (
-    <div className="relative h-56 md:h-64 overflow-hidden rounded-none bg-slate-900/5">
+    <div className="relative h-72 md:h-80 overflow-hidden rounded-none bg-slate-900/5">
       {/* Slides */}
       {slides.map((slide, i) => (
         <div
@@ -113,7 +113,7 @@ export default function CategoryCarousel({ categorySlug, categoryName }: Props) 
           <img
             src={slide.image}
             alt={`${categoryName} slide ${i + 1}`}
-            className="w-full h-full object-contain md:object-cover"
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/50 to-transparent" />
         </div>
@@ -123,30 +123,13 @@ export default function CategoryCarousel({ categorySlug, categoryName }: Props) 
       <div className="absolute inset-0 flex items-center px-6 md:px-12 z-20">
         <div>
           <nav className="text-slate-400 text-sm mb-2">
-            <button className="hover:text-white">Home</button>
+            <button onClick={() => onNavigate('home')} className="hover:text-white">Home</button>
             <span className="mx-2">/</span>
             <span className="text-white">{categoryName}</span>
           </nav>
           <h1 className="text-3xl md:text-5xl font-black text-white">{categoryName}</h1>
         </div>
       </div>
-
-      {/* Navigation arrows */}
-      <button
-        onClick={() => goToSlide(current - 1)}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-110 border border-white/30"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft size={22} />
-      </button>
-
-      <button
-        onClick={() => goToSlide(current + 1)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-110 border border-white/30"
-        aria-label="Next slide"
-      >
-        <ChevronRight size={22} />
-      </button>
 
       {/* Slide indicators */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">

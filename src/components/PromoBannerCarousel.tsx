@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export type PromoSlide = {
   id: string;
@@ -16,7 +15,7 @@ export type PromoSlide = {
 export const PROMO_SLIDES: PromoSlide[] = [
   {
     id: 'beauty',
-    image: 'https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg',
+    image: 'https://m.media-amazon.com/images/I/414GuM0i0xL._AC_UL480_FMwebp_QL65_.jpg',
     badge: 'GLOW UP',
     title: 'Beauty & Care',
     description: 'Discover skincare, cosmetics and wellness products.',
@@ -38,7 +37,7 @@ export const PROMO_SLIDES: PromoSlide[] = [
   },
   {
     id: 'electronics',
-    image: 'https://images.pexels.com/photos/11969081/pexels-photo-11969081.jpeg',
+    image: 'https://m.media-amazon.com/images/I/71JGCn1z1TL._AC_UY327_FMwebp_QL65_.jpg',
     badge: 'NEXTGEN TECH',
     title: 'Electronics & Gadgets',
     description: 'Cutting-edge phones, laptops, audio and smart devices.',
@@ -120,27 +119,6 @@ export default function PromoBannerCarousel({ onNavigate }: Props) {
             </div>
           ))}
         </div>
-
-        <button
-          type="button"
-          onClick={() => goTo(index - 1)}
-          className="absolute left-2 sm:left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full w-9 sm:w-10 md:w-11 lg:w-12 h-9 sm:h-10 md:h-11 lg:h-12 flex items-center justify-center shadow-md sm:shadow-lg transition-colors"
-          aria-label="Previous banner"
-        >
-          <ChevronLeft size={18} className="sm:hidden" />
-          <ChevronLeft size={20} className="hidden sm:block md:hidden" />
-          <ChevronLeft size={22} className="hidden md:block" />
-        </button>
-        <button
-          type="button"
-          onClick={() => goTo(index + 1)}
-          className="absolute right-2 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full w-9 sm:w-10 md:w-11 lg:w-12 h-9 sm:h-10 md:h-11 lg:h-12 flex items-center justify-center shadow-md sm:shadow-lg transition-colors"
-          aria-label="Next banner"
-        >
-          <ChevronRight size={18} className="sm:hidden" />
-          <ChevronRight size={20} className="hidden sm:block md:hidden" />
-          <ChevronRight size={22} className="hidden md:block" />
-        </button>
 
         <div className="absolute bottom-3 sm:bottom-4 md:bottom-5 lg:bottom-6 left-1/2 -translate-x-1/2 flex flex-wrap justify-center gap-1 sm:gap-1.5 md:gap-2 max-w-[90%] z-20">
           {PROMO_SLIDES.map((s, i) => (

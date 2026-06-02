@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CreditCard, RefreshCw, Shield, Truck, TrendingUp, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
 import PromoBannerCarousel from '../components/PromoBannerCarousel';
 import FAQ from '../components/FAQ';
@@ -98,11 +98,11 @@ export default function HomePage({ onNavigate }: Props) {
             </button>
           ))}
         </div>
-      </section> */}
-      
+      </section>
+       */}
 
       {/* Today's Deals */}
-      {deals.length > 0 && (
+      {/* {deals.length > 0 && (
         <section className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 py-14">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
@@ -135,7 +135,7 @@ export default function HomePage({ onNavigate }: Props) {
             </div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* Featured Products */}
       {/* {featured.length > 0 && (
@@ -208,8 +208,11 @@ export default function HomePage({ onNavigate }: Props) {
           </div>
         </section>
       )} */}
-{/* Trending Carousel */}
-{trending.length > 0 && (
+  {/* Second Promo Banner before Trending */}
+  <PromoBannerCarousel onNavigate={onNavigate} />
+
+  {/* Trending Carousel */}
+  {trending.length > 0 && (
   <section className="relative max-w-7xl mx-auto px-4 py-14">
     <div className="flex items-center justify-between mb-8">
       <div className="flex items-center gap-4">
@@ -227,9 +230,9 @@ export default function HomePage({ onNavigate }: Props) {
       </div>
     </div>
 
-    <div className="relative">
+    <div className="relative overflow-hidden">
       {/* LEFT ARROW */}
-      <button
+      {/* <button
         onClick={() => setTrendingSlide((prev) => {
           const slideCount = Math.ceil(trending.length / TOP_TRENDING_STEP);
           return (prev - 1 + slideCount) % slideCount;
@@ -237,10 +240,10 @@ export default function HomePage({ onNavigate }: Props) {
         className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
       >
         <ChevronLeft size={22} />
-      </button>
+      </button> */}
 
       {/* RIGHT ARROW */}
-      <button
+      {/* <button
         onClick={() => setTrendingSlide((prev) => {
           const slideCount = Math.ceil(trending.length / TOP_TRENDING_STEP);
           return (prev + 1) % slideCount;
@@ -248,17 +251,25 @@ export default function HomePage({ onNavigate }: Props) {
         className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white shadow-xl border border-slate-200 rounded-full w-12 h-12 flex items-center justify-center hover:bg-orange-50 hover:text-orange-500 transition-all"
       >
         <ChevronRight size={22} />
-      </button>
+      </button> */}
 
-      {/* CAROUSEL */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-        {trending
-          .slice(trendingSlide * TOP_TRENDING_STEP, trendingSlide * TOP_TRENDING_STEP + TOP_TRENDING_STEP)
-          .map((product) => (
-            <div key={product.id}>
-              <ProductCard product={product} onNavigate={onNavigate} />
+      <div
+        className="flex h-full transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${trendingSlide * 100}%)` }}
+      >
+        {Array.from({ length: Math.ceil(trending.length / TOP_TRENDING_STEP) }).map((_, slideIdx) => (
+          <div key={slideIdx} className="min-w-full px-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+              {trending
+                .slice(slideIdx * TOP_TRENDING_STEP, slideIdx * TOP_TRENDING_STEP + TOP_TRENDING_STEP)
+                .map((product) => (
+                  <div key={product.id}>
+                    <ProductCard product={product} onNavigate={onNavigate} />
+                  </div>
+                ))}
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -322,7 +333,7 @@ export default function HomePage({ onNavigate }: Props) {
       )} */}
       <FAQ />
 
-      <PromoBannerCarousel onNavigate={onNavigate} />
+      {/* <PromoBannerCarousel onNavigate={onNavigate} /> */}
       {/* Features */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
