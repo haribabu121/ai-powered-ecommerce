@@ -98,7 +98,7 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
   const displayImages = images.length > 0 ? images : [fallbackImage];
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
+    <div className="min-h-screen bg-slate-50 pt-3 lg:pt-12">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-4">
         <nav className="flex items-center gap-2 text-sm text-slate-500">
@@ -197,27 +197,27 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
             )}
 
             {/* Qty + Add to cart */}
-            <div className="flex flex-wrap gap-3 mb-6">
-              <div className="flex items-center border-2 border-slate-200 rounded-xl overflow-hidden">
+            <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden flex-shrink-0">
                 <button
                   onClick={() => setQty(Math.max(1, qty - 1))}
-                  className="px-4 py-3 text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="px-2 py-3 text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  <Minus size={16} />
+                  <Minus size={14} />
                 </button>
-                <span className="px-4 py-3 font-bold text-slate-900 min-w-[3rem] text-center">{qty}</span>
+                <span className="px-2 py-2 font-bold text-slate-900 min-w-[rem] text-center">{qty}</span>
                 <button
                   onClick={() => setQty(qty + 1)}
                   className="px-4 py-3 text-slate-600 hover:bg-slate-50 transition-colors"
                 >
-                  <Plus size={16} />
+                  <Plus size={14} />
                 </button>
               </div>
 
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock_quantity === 0}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-bold text-sm transition-all duration-200 shadow-md ${
+                className={`flex-1 flex items-center justify-center gap-0 py-1 px-2 rounded-xl font-bold text-sm transition-all duration-200 shadow-md ${
                   added
                     ? 'bg-emerald-500 text-white shadow-emerald-200'
                     : product.stock_quantity === 0
@@ -225,7 +225,7 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
                     : 'bg-slate-900 text-white hover:bg-slate-700 hover:shadow-lg active:scale-95'
                 }`}
               >
-                {added ? <Check size={18} /> : <ShoppingCart size={18} />}
+                {added ? <Check size={5} /> : <ShoppingCart size={18} />}
                 {added ? 'Added to Cart!' : 'Add to Cart'}
               </button>
 
@@ -247,7 +247,7 @@ export default function ProductPage({ productSlug, onNavigate }: Props) {
                 <Heart size={20} fill={wishlisted ? 'currentColor' : 'none'} />
               </button>
 
-              <button className="p-3 rounded-xl border-2 border-slate-200 text-slate-500 hover:border-slate-400 transition-colors">
+              <button className="p-2 rounded-xl border-2 border-slate-200 text-slate-500 hover:border-slate-400 transition-colors">
                 <Share2 size={20} />
               </button>
             </div>

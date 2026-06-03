@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight,ArrowLeft, Loader2, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 type Props = {
@@ -60,7 +60,16 @@ export default function SignUpPage({ onNavigate }: Props) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-rose-50 pt-28 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+        <div className="w-full max-w-md">
+  <div className="mb-4">
+    <button
+      onClick={() => onNavigate('signin')}
+      className="absolute top-8 left-4 md:left-8 flex items-center gap-2 text-slate-700 hover:text-orange-500 transition-colors"
+    >
+      <ArrowLeft size={20} />
+      Back to signin
+    </button>
+  </div>
         <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 p-8 md:p-10">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
