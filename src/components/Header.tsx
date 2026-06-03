@@ -48,8 +48,8 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
       onClick={() => onNavigate('home')}
       className="flex items-center gap-2 flex-shrink-0"
     >
-      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-400 to-rose-500 rounded-xl flex items-center justify-center shadow-md">
-        <Home size={18} className="text-white sm:hidden" />
+      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-400 to-rose-500 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md">
+        <Home size={16} className="text-white sm:hidden" />
         <Home size={20} className="text-white hidden sm:block" />
       </div>
       <span className="hidden sm:inline text-slate-800 font-extrabold text-lg sm:text-xl">
@@ -58,22 +58,23 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
     </button>
   );
 
-  const searchForm = (className: string, inputClassName = 'h-12') => (
+  const searchForm = (className: string, inputClassName = 'h-9 sm:h-10') => (
     <form onSubmit={handleSearch} className={className}>
       <div className="relative">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search for products, brands, categories..."
-          className={`w-full min-w-0 pl-4 pr-12 text-base bg-white text-slate-800 placeholder-slate-500 rounded-2xl border border-slate-200 focus:outline-none focus:border-orange-300 focus:ring-2 focus:ring-orange-100 transition-all ${inputClassName}`}
+          placeholder="Search products..."
+          className={`w-full min-w-0 pl-3 sm:pl-4 pr-8 sm:pr-12 text-sm sm:text-base bg-slate-100 sm:bg-white text-slate-800 placeholder-slate-400 rounded-lg sm:rounded-2xl border border-transparent sm:border-slate-200 focus:outline-none focus:bg-white focus:border-orange-300 focus:ring-2 focus:ring-orange-100 transition-all ${inputClassName}`}
         />
         <button
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white shadow-md hover:bg-orange-600 transition-colors"
+          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-md sm:rounded-xl text-slate-500 sm:bg-orange-500 sm:text-white sm:shadow-sm hover:text-orange-600 sm:hover:bg-orange-600 transition-colors"
           aria-label="Search"
         >
-          <Search size={16} />
+          <Search size={16} className="sm:hidden" />
+          <Search size={16} className="hidden sm:block" />
         </button>
       </div>
     </form>
@@ -138,38 +139,36 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('wishlist')}
-        className="relative p-1.5 sm:p-2.5 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+        className="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 text-slate-600 hover:text-rose-500 hover:bg-slate-100 rounded-lg sm:rounded-xl transition-colors"
       >
         <Heart size={20} className="sm:hidden" />
         <Heart size={22} className="hidden sm:block" />
         {wishlistItems.length > 0 && (
-          <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
+          <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
             {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
           </span>
         )}
       </button>
       <button
           onClick={() => user ? setUserMenuOpen(!userMenuOpen) : onNavigate('signin')}
-          className="flex items-center gap-1 px-1 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+          className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl hover:bg-slate-100 sm:hover:shadow-md transition-colors sm:bg-gradient-to-br sm:from-orange-400 sm:to-rose-500 text-slate-600 sm:text-white font-bold"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-orange-400 to-rose-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-            {user && profile?.full_name ? profile.full_name[0].toUpperCase() : <User size={18} className="sm:hidden" />}
-            {!user && <User size={22} className="hidden sm:block" />}
-          </div>
-          </button>
+          {user && profile?.full_name ? <span className="sm:hidden text-sm">{profile.full_name[0].toUpperCase()}</span> : <User size={20} className="sm:hidden" />}
+          {user && profile?.full_name ? <span className="hidden sm:block text-base">{profile.full_name[0].toUpperCase()}</span> : <User size={20} className="hidden sm:block" />}
+      </button>
 
       <div className="relative">
         <button
           onClick={() => setCurrencyOpen(!currencyOpen)}
-          className="flex items-center gap-1 px-1.5 sm:px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors text-[11px] sm:text-sm text-slate-700"
+          className="flex items-center justify-center gap-1 w-8 h-8 sm:w-auto sm:px-3 sm:h-10 rounded-lg sm:rounded-xl hover:bg-slate-100 transition-colors text-[11px] sm:text-sm text-slate-600"
         >
           <img
             src={currency === 'CAD' ? 'https://flagcdn.com/w40/ca.png' : 'https://flagcdn.com/w40/us.png'}
             alt={currency}
-            className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover"
+            className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover"
           />
-          <span className="font-medium">{currency === 'CAD' ? 'CA' : 'US'}</span>
-          <ChevronDown size={14} className="text-slate-400" />
+          <span className="hidden sm:inline font-medium">{currency === 'CAD' ? 'CA' : 'US'}</span>
+          <ChevronDown size={14} className="hidden sm:block text-slate-400" />
         </button>
 
         {currencyOpen && (
@@ -194,24 +193,25 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
 
       <button
         onClick={() => onNavigate('cart')}
-        className="relative flex items-center gap-1.5 bg-gradient-to-r from-orange-400 to-rose-500 text-white px-2.5 py-2 rounded-xl hover:shadow-lg transition-all"
+        className="relative flex items-center justify-center gap-1.5 sm:bg-gradient-to-r sm:from-orange-400 sm:to-rose-500 text-slate-600 sm:text-white w-8 h-8 sm:w-auto sm:px-3 sm:h-10 rounded-lg sm:rounded-xl hover:bg-slate-100 sm:hover:shadow-lg transition-all"
       >
         <div className="relative">
-          <ShoppingCart size={20} />
+          <ShoppingCart size={20} className="sm:hidden" />
+          <ShoppingCart size={20} className="hidden sm:block" />
           {itemCount > 0 && (
-            <span className="absolute -top-2.5 -right-2.5 bg-white text-orange-500 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow">
+            <span className="absolute -top-1.5 -right-1.5 sm:-top-2.5 sm:-right-2.5 bg-rose-500 sm:bg-white text-white sm:text-orange-500 text-[9px] sm:text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-bold shadow">
               {itemCount > 99 ? '99+' : itemCount}
             </span>
           )}
         </div>
-        <span className="font-semibold text-[11px] sm:text-sm">Cart</span>
+        <span className="hidden sm:inline font-semibold text-[11px] sm:text-sm">Cart</span>
       </button>
 
     </div>
   );
 
   return (
-    <header className={` transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-white shadow-lg' : 'bg-white'
     }`}>
       <div className="px-3 sm:px-4 lg:px-8 py-2 sm:py-3">
@@ -219,7 +219,7 @@ export default function Header({ categories, onSearch, onNavigate, currentPage }
           <div className="flex items-center justify-between gap-1.5 sm:gap-2 flex-nowrap">
             {logoButton}
             <div className="flex-1 min-w-0">
-              {searchForm('min-w-0', 'h-10 sm:h-12 text-sm sm:text-base rounded-xl sm:rounded-2xl px-3 sm:px-4')}
+              {searchForm('min-w-0', 'h-9 sm:h-10')}
             </div>
             {rightActions}
           </div>

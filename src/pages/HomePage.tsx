@@ -115,12 +115,12 @@ export default function HomePage({ onNavigate }: Props) {
                   <p className="text-orange-100 text-sm">Limited time — grab them fast</p>
                 </div>
               </div>
-              <button
+              {/* <button
                 onClick={() => onNavigate('categories')}
                 className="hidden sm:flex items-center gap-2 bg-white text-orange-600 font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-orange-50 transition-colors shadow-lg"
               >
                 View All <ArrowRight size={16} />
-              </button>
+              </button> */}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
               {deals.map((p) => (

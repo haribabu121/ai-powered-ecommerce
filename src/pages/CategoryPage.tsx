@@ -50,19 +50,19 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
       const firstGroup = groceryGroups[0]?.slug || 'jaggery';
       setGroceryGroup(firstGroup);
       setSubCategory('all');
-      setOpenCategories(Object.fromEntries(groceryGroups.map((group) => [group.slug, true])));
+      setOpenCategories(Object.fromEntries(groceryGroups.map((group, index) => [group.slug, index === 0])));
       return;
     }
 
     if (isAllProductsPage) {
       setSubCategory('all');
-      setOpenCategories(Object.fromEntries(allProductsCategories.map((cat) => [cat.slug, false])));
+      setOpenCategories(Object.fromEntries(allProductsCategories.map((cat, index) => [cat.slug, index === 0])));
       return;
     }
 
     setSubCategory('all');
-    setOpenCategories({ [categorySlug]: true });
-  }, [categorySlug, groceryGroups, allProductsCategories, isAllProductsPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categorySlug]);
 
   useEffect(() => {
     setLoading(true);
@@ -73,7 +73,12 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     }
 
     if (categorySlug === 'grocery' && subCategory !== 'all') {
-      query = query.eq('subcategory', subCategory);
+      const isGroup = groceryGroups.some(g => g.slug === subCategory);
+      if (isGroup) {
+        query = query.eq('subcategory', subCategory);
+      } else {
+        query = query.eq('slug', subCategory);
+      }
     } else if (categorySlug !== 'grocery' && subCategory !== 'all') {
       query = query.eq('subcategory', subCategory);
     }
@@ -102,9 +107,6 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
     'health-wellness': 'https://images.pexels.com/photos/4498158/pexels-photo-4498158.jpeg',
   };
 
-  const handleGroceryItemClick = (sub: SubcategoryItem) => {
-    onNavigate('product', { slug: sub.slug });
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 pt-0">
@@ -179,7 +181,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
               activeSubcategories.map((sub) => (
                 <button
                   key={sub.slug}
-                  onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
+                  onClick={() => setSubCategory(sub.slug)}
                   className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     subCategory === sub.slug
                       ? 'bg-slate-100 text-slate-900 font-semibold'
@@ -196,7 +198,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
 
       <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
         <aside className="hidden lg:block w-72 flex-shrink-0">
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-36 max-h-[calc(100vh-9rem)] overflow-y-auto">
             {isAllProductsPage ? (
               <div className="mb-4">
                 <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Categories</h2>
@@ -207,20 +209,27 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                 <div key={group.slug} className="mb-4">
                   <button
                     type="button"
-                    onClick={() => setOpenCategories((prev) => ({ ...prev, [group.slug]: !(prev[group.slug] ?? true) }))}
+                    onClick={() => {
+                      setOpenCategories((prev) => ({ [group.slug]: !(prev[group.slug] ?? false) }));
+                      setSubCategory(group.slug);
+                    }}
                     className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
                   >
                     <span>{group.name}</span>
-                    {(openCategories[group.slug] ?? true) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    {(openCategories[group.slug] ?? false) ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
-                  {(openCategories[group.slug] ?? true) && (
+                  {(openCategories[group.slug] ?? false) && (
                     <div className="mt-2 space-y-2 pl-4">
                       {group.items.map((sub) => (
                         <button
                           key={sub.slug}
                           type="button"
-                          onClick={() => (categorySlug === 'grocery' ? handleGroceryItemClick(sub) : setSubCategory(sub.slug))}
-                          className="w-full text-left text-sm px-3 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                          onClick={() => setSubCategory(sub.slug)}
+                          className={`w-full text-left text-sm px-3 py-2 rounded-lg transition-colors ${
+                            subCategory === sub.slug
+                              ? 'bg-slate-100 text-slate-900 font-semibold'
+                              : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                          }`}
                         >
                           {sub.name}
                         </button>
@@ -236,7 +245,7 @@ export default function CategoryPage({ categorySlug, categories, onNavigate }: P
                   <div key={cat.slug} className="mb-4">
                     <button
                       type="button"
-                      onClick={() => setOpenCategories((prev) => ({ ...prev, [cat.slug]: !(prev[cat.slug] ?? false) }))}
+                      onClick={() => setOpenCategories((prev) => ({ [cat.slug]: !(prev[cat.slug] ?? false) }))}
                       className="w-full flex items-center justify-between text-sm px-3 py-2 rounded-lg transition-colors bg-orange-50 text-orange-700 font-semibold"
                     >
                       <span>{cat.name}</span>
