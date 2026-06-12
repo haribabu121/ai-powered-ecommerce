@@ -144,7 +144,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
 
   return (
     <div className="min-h-screen bg-slate-50 pt-32 lg:pt-28">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-2">
         <button onClick={() => onNavigate('cart')} className="flex items-center gap-2 text-slate-500 hover:text-slate-700 text-sm mb-6">
           <ArrowLeft size={16} />
           Back to Cart
@@ -215,7 +215,7 @@ export default function CheckoutPage({ onNavigate }: Props) {
                   <button
                     onClick={() => setStep('payment')}
                     disabled={!shipping.firstName || !shipping.email || !shipping.address}
-                    className="mt-6 w-full bg-gradient-to-r from-orange-400 to-rose-500 hover:shadow-lg disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3.5 rounded-xl transition-all"
+                    className="mt-6 w-full bg-gradient-to-r from-orange-400 to-rose-500 hover:shadow-lg disabled:bg-slate-200 disabled:text-white-400 text-white font-bold py-3.5 rounded-xl transition-all"
                   >
                     Continue to Payment
                   </button>

@@ -6,8 +6,8 @@ import CaptchaGate from './components/CaptchaGate.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-<CaptchaGate>
+{/* <CaptchaGate> */}
     <App />
-</CaptchaGate>
+{/* </CaptchaGate> */}
   </StrictMode>
 );
